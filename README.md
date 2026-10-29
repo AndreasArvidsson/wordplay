@@ -1,5 +1,7 @@
 # Wordplay
 
+Play online at [https://AndreasArvidsson.github.io/wordplay](https://AndreasArvidsson.github.io/wordplay)
+
 ## Vocabulary source
 
 [Linguabase](https://huggingface.co/datasets/linguabase/linguabase)

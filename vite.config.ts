@@ -16,7 +16,7 @@ export default defineConfig((): UserConfig => {
         },
 
         build: {
-            outDir: path.join(import.meta.dirname, "out"),
+            outDir: path.join(import.meta.dirname, "docs"),
             target: "es2020",
             sourcemap: true,
             emptyOutDir: false,

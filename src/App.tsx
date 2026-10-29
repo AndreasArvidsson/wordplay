@@ -1,9 +1,9 @@
 import type { JSX } from "preact";
 import { useState } from "preact/hooks";
-import vocabulary from "../assets/vocabulary.json";
 import { findWords } from "./findWords";
 import { Game } from "./Game.js";
 import { generateLetters } from "./generateLetters";
+import { readVocabulary } from "./readVocabulary";
 import type { Letter, Word } from "./types";
 
 const context = {
@@ -183,7 +183,8 @@ export function App(): JSX.Element {
         );
     }
 
-    const generateGameContext = () => {
+    const generateGameContext = async () => {
+        const vocabulary = await readVocabulary();
         const letters = generateLetters(numLetters);
         const lettersWithId = letters.map((letter, index) => ({
             id: `${letter}${index}`,
@@ -235,7 +236,16 @@ export function App(): JSX.Element {
                             <button
                                 type="button"
                                 className="btn btn-primary mt-3"
-                                onClick={generateGameContext}
+                                onClick={() => {
+                                    generateGameContext().catch(
+                                        (error: unknown) => {
+                                            console.error(
+                                                "Failed to generate game context:",
+                                                error,
+                                            );
+                                        },
+                                    );
+                                }}
                             >
                                 Start
                             </button>

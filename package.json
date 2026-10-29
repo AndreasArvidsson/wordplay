@@ -1,22 +1,23 @@
 {
-    "name": "cardmarket-helper",
+    "name": "wordplay",
     "version": "0.1.0",
-    "description": "Helper tools for Cardmarket",
+    "description": "Online word game",
     "author": "Andreas Arvidsson",
     "license": "MIT",
     "type": "module",
+    "private": true,
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/cursorless-dev/cardmarket-helper.git"
+        "url": "git+https://github.com/AndreasArvidsson/wordplay.git"
     },
-    "funding": "https://github.com/sponsors/cardmarket-helper",
+    "funding": "https://github.com/sponsors/AndreasArvidsson",
     "sponsor": {
-        "url": "https://github.com/sponsors/cardmarket-helper"
+        "url": "https://github.com/sponsors/AndreasArvidsson"
     },
     "scripts": {
         "dev": "vite",
         "build": "npm run clean && vite build",
-        "clean": "rm -rf out/*",
+        "clean": "rm -rf docs/*",
         "lint": "npm run typecheck && npm run lint:ts && npm run lint:fmt",
         "typecheck": "tsc -p . --noEmit",
         "lint:ts": "oxlint -c oxlint.config.mts --deny-warnings .",
