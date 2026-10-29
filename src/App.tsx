@@ -186,7 +186,7 @@ export function App(): JSX.Element {
     const generateGameContext = () => {
         const letters = generateLetters(numLetters);
         const lettersWithId = letters.map((letter, index) => ({
-            id: `letter${index}`,
+            id: `${letter}${index}`,
             letter,
         }));
         const words = findWords(letters, includeUnfamiliarWords, vocabulary);

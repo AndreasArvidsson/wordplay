@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import { useState } from "preact/hooks";
+import { useLayoutEffect, useState } from "preact/hooks";
 import { classNames } from "./classNames";
 import { shuffleList } from "./shuffleList";
 import type { Letter, Word } from "./types";
@@ -30,6 +30,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
         })),
     );
     const isDone = solvedWords.every((sw) => sw.isSolved || sw.isGivenUp);
+    const numSelectedLetters = selectedLetters.filter((s) => s != null).length;
 
     const selectLetter = (letter: Letter) => {
         const copy = selectedLetters.slice();
@@ -65,14 +66,11 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             .map((s) => s?.letter ?? "")
             .join("")
             .toLowerCase();
-        const foundWord = words.find((w) => w.word === word);
+        const foundWord = solvedWords.find((sw) => sw.word.word === word);
 
-        if (foundWord != null) {
-            const solvedWord = solvedWords.find((sw) => sw.word === foundWord);
-            if (solvedWord) {
-                solvedWord.isSolved = true;
-                setSolvedWords(solvedWords.slice());
-            }
+        if (foundWord) {
+            foundWord.isSolved = true;
+            setSolvedWords(solvedWords.slice());
         }
 
         setLastSubmission(selectedLetters);
@@ -87,6 +85,64 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
         );
         resetSelectedLetters();
     };
+
+    useLayoutEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (
+                isDone ||
+                event.defaultPrevented ||
+                event.ctrlKey ||
+                event.metaKey ||
+                event.altKey ||
+                event.isComposing ||
+                (event.target instanceof HTMLElement &&
+                    (event.target.isContentEditable ||
+                        event.target.closest("input, textarea, select") !=
+                            null))
+            ) {
+                return;
+            }
+
+            switch (event.key) {
+                case "Enter":
+                    event.preventDefault();
+                    if (numSelectedLetters >= 3) {
+                        submitSelectedLetters();
+                    }
+                    break;
+                case "Backspace": {
+                    event.preventDefault();
+                    const lastLetter = selectedLetters.findLast(
+                        (letter) => letter != null,
+                    );
+                    if (lastLetter != null) {
+                        deselectLetter(lastLetter);
+                    }
+                    break;
+                }
+                case "Escape":
+                    event.preventDefault();
+                    resetSelectedLetters();
+                    break;
+                default: {
+                    const letter = shuffledLetters.find(
+                        (l) =>
+                            l.letter === event.key.toUpperCase() &&
+                            !selectedLetters.some(
+                                (selected) => selected?.id === l.id,
+                            ),
+                    );
+                    if (letter != null) {
+                        event.preventDefault();
+                        selectLetter(letter);
+                    }
+                }
+            }
+        };
+
+        globalThis.addEventListener("keydown", handleKeyDown);
+        return () => globalThis.removeEventListener("keydown", handleKeyDown);
+    });
 
     const renderWords = () => {
         const columnCount = 5;
@@ -169,9 +225,6 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     };
 
     const renderButtons = () => {
-        const numSelectedLetters = selectedLetters.filter(
-            (s) => s != null,
-        ).length;
         return (
             <div className="mt-4 game-buttons">
                 <button

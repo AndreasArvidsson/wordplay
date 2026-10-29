@@ -15,4 +15,3 @@
 - Score
 - Local storage of settings and scores
 - timed
-- keyboard interaction
