@@ -44,6 +44,7 @@ const disabledRules = [
     "oxc/no-rest-spread-properties",
     "promise/avoid-new",
     "promise/prefer-await-to-callbacks",
+    "react/jsx-no-literals",
     "typescript/explicit-function-return-type",
     "typescript/no-unnecessary-type-parameters",
     "typescript/parameter-properties",
@@ -56,9 +57,11 @@ const disabledRules = [
     "unicorn/no-lonely-if",
     "unicorn/no-null",
     "unicorn/prefer-at",
+    "unicorn/prefer-query-selector",
     "unicorn/prefer-spread",
     "unicorn/prefer-top-level-await",
     "unicorn/switch-case-braces",
+    "react/react-in-jsx-scope",
 ];
 
 // oxlint-disable-next-line import/no-default-export
@@ -95,6 +98,10 @@ export default defineConfig({
 
     rules: {
         ...Object.fromEntries(disabledRules.map((r) => [r, "off"])),
+        "react/jsx-filename-extension": [
+            "warn",
+            { extensions: [".jsx", ".tsx"] },
+        ],
         "eslint/eqeqeq": [
             "warn",
             "always",

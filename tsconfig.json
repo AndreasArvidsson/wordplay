@@ -1,16 +1,22 @@
 {
     "compilerOptions": {
-        "module": "nodenext",
+        "module": "esnext",
         "target": "esnext",
-        "moduleResolution": "nodenext",
-        "types": ["node", "mocha"],
+        "jsx": "react-jsx",
+        "jsxImportSource": "preact",
+        "moduleResolution": "bundler",
+        "types": ["node", "vite/client"],
         "rootDir": ".",
         "noEmit": true,
         "esModuleInterop": true,
         "strict": true,
         "noImplicitAny": true,
         "forceConsistentCasingInFileNames": true,
-        "noImplicitReturns": true
+        "noImplicitReturns": true,
+        "paths": {
+            "react": ["./node_modules/preact/compat/"]
+        }
     },
-    "include": ["src", "scripts"]
+    "include": ["src", "scripts"],
+    "exclude": ["node_modules"]
 }

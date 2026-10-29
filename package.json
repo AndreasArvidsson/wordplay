@@ -14,8 +14,8 @@
         "url": "https://github.com/sponsors/cardmarket-helper"
     },
     "scripts": {
-        "optimize": "tsx scripts/optimize.ts",
-        "build": "npm run clean && tsc -p . && tsx ./scripts/build.ts",
+        "run": "vite",
+        "build": "npm run clean && vite build",
         "clean": "rm -rf out/*",
         "lint": "npm run typecheck && npm run lint:ts && npm run lint:fmt",
         "typecheck": "tsc -p . --noEmit",
@@ -24,19 +24,20 @@
         "fix": "npm run fix:ts && npm run fix:fmt",
         "fix:ts": "oxlint -c oxlint.config.mts --fix .",
         "fix:fmt": "oxfmt .",
-        "test": "tsx ./test/runAllTests.ts",
         "parseVocabulary": "tsx ./scripts/parseVocabulary.ts"
     },
-    "dependencies": {},
+    "dependencies": {
+        "bootstrap": "^5.3.8",
+        "preact": "^11.1.0",
+        "react-bootstrap-icons": "^1.11.6"
+    },
     "devDependencies": {
-        "@types/mocha": "^10.0.10",
         "@types/node": "^24.19.2",
-        "fast-glob": "^3.3.3",
-        "mocha": "^12.0.3",
         "oxfmt": "^0.75.0",
         "oxlint-tsgolint": "^7.0.2004",
         "oxlint": "^1.90.0",
         "tsx": "^4.23.15",
-        "typescript": "^7.0.2"
+        "typescript": "^7.0.2",
+        "vite": "^8.3.5"
     }
 }
