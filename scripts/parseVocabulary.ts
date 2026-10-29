@@ -116,7 +116,7 @@ for await (const row of vocabulary) {
     }
 
     wordMap.set(word, {
-        word,
+        text: word,
         familiarityScore: Number(familiarityScore),
     });
 }
@@ -179,7 +179,7 @@ function stripTrailingStar(word: string): string {
 
 const words = Array.from(wordMap.values());
 
-words.sort((a, b) => a.word.localeCompare(b.word));
+words.sort((a, b) => a.text.localeCompare(b.text));
 
 const jsonContent = JSON.stringify(words, null, 4);
 fs.writeFileSync(outputJsonFile, jsonContent);

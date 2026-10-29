@@ -34,7 +34,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     const isDone = solvedWords.every((sw) => sw.isSolved || sw.isGivenUp);
     const numSelectedLetters = selectedLetters.filter((s) => s != null).length;
     const longestWordLength = words.reduce(
-        (length, { word }) => Math.max(length, word.length),
+        (length, { text: word }) => Math.max(length, word.length),
         1,
     );
 
@@ -72,7 +72,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             .map((s) => s?.letter ?? "")
             .join("")
             .toLowerCase();
-        const foundWord = solvedWords.find((sw) => sw.word.word === word);
+        const foundWord = solvedWords.find((sw) => sw.word.text === word);
 
         if (foundWord) {
             foundWord.isSolved = true;
@@ -89,7 +89,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             (sw) =>
                 !sw.isSolved &&
                 sw.numCluesUsed > 0 &&
-                sw.numCluesUsed < sw.word.word.length,
+                sw.numCluesUsed < sw.word.text.length,
         );
 
         if (cluesInProgress != null) {
@@ -204,7 +204,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
         return (
             <div className="game-words">
                 {solvedWords.map((word) => (
-                    <div key={word.word.word} className="game-word">
+                    <div key={word.word.text} className="game-word">
                         {renderWord(word)}
                     </div>
                 ))}
@@ -337,6 +337,10 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             style={{
                 "--letter-count": letters.length,
                 "--word-width": `${longestWordLength * 1.35}rem`,
+                "--word-columns": Math.max(
+                    1,
+                    Math.min(5, Math.floor(words.length / 3)),
+                ),
             }}
         >
             {renderScore()}
@@ -373,7 +377,7 @@ function getScores(solvedWords: SolvedWord[]): {
 }
 
 function getWordScore(word: Word): number {
-    return word.word.length ** 2;
+    return word.text.length ** 2;
 }
 
 function getDefaultSelected(length: number): (Letter | null)[] {
@@ -381,7 +385,7 @@ function getDefaultSelected(length: number): (Letter | null)[] {
 }
 
 function renderWord(word: SolvedWord): JSX.Element[] {
-    const letters = word.word.word.split("");
+    const letters = word.word.text.split("");
     const clues =
         word.numCluesUsed > 0
             ? word.word.clues?.slice(0, word.numCluesUsed)

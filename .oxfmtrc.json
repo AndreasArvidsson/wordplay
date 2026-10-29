@@ -6,5 +6,6 @@
     "sortImports": {
         "newlinesBetween": false,
         "partitionByNewline": true
-    }
+    },
+    "ignorePatterns": ["/assets/", "/docs/"]
 }

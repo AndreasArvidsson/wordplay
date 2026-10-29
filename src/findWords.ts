@@ -1,3 +1,4 @@
+import { allowWord } from "./allowWord.js";
 import type { Word } from "./types.js";
 
 export function findWords(
@@ -13,19 +14,19 @@ export function findWords(
         letterCounts.set(letterNormalized, count + 1);
     }
 
-    const filteredWords = vocabulary.filter(({ word, familiarityScore }) => {
-        if (word.length < 3 || word.length > letters.length) {
+    const filteredWords = vocabulary.filter((word) => {
+        if (word.text.length < 3 || word.text.length > letters.length) {
             return false;
         }
 
-        if (!includeUnfamiliar && familiarityScore < 0.5) {
+        if (!allowWord(word, includeUnfamiliar)) {
             return false;
         }
 
         // Each candidate starts with the full set of available letters.
         const remainingLetters = new Map(letterCounts);
 
-        for (const letter of word.toLowerCase()) {
+        for (const letter of word.text.toLowerCase()) {
             const count = remainingLetters.get(letter) ?? 0;
 
             if (count === 0) {
@@ -39,7 +40,7 @@ export function findWords(
     });
 
     filteredWords.sort(
-        (a, b) => a.word.length - b.word.length || a.word.localeCompare(b.word),
+        (a, b) => a.text.length - b.text.length || a.text.localeCompare(b.text),
     );
 
     return filteredWords;

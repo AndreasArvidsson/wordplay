@@ -15,10 +15,15 @@ export function App(): JSX.Element {
     const [numLetters, setNumLetters] = useState(6);
     const [includeUnfamiliarWords, setIncludeUnfamiliarWords] = useState(false);
     const [gameContext, setGameContext] = useState<GameContext>();
+    const [errorMessage, setErrorMessage] = useState<string>();
 
     useEffect(() => {
         readVocabulary().catch((error: unknown) => {
-            console.error("Failed to preload vocabulary:", error);
+            setErrorMessage(
+                error instanceof Error
+                    ? error.message
+                    : "Failed to preload vocabulary.",
+            );
         });
     }, []);
 
@@ -37,13 +42,18 @@ export function App(): JSX.Element {
     }
 
     const generateGameContext = async () => {
+        setErrorMessage(undefined);
         const vocabulary = await readVocabulary();
-        const letters = generateLetters(numLetters);
+        const letters = generateLetters(
+            numLetters,
+            includeUnfamiliarWords,
+            vocabulary,
+        );
+        const words = findWords(letters, includeUnfamiliarWords, vocabulary);
         const lettersWithId = letters.map((letter, index) => ({
             id: `${letter}${index}`,
             letter,
         }));
-        const words = findWords(letters, includeUnfamiliarWords, vocabulary);
         setGameContext({ letters: lettersWithId, words });
     };
 
@@ -58,6 +68,8 @@ export function App(): JSX.Element {
                         <td>
                             <input
                                 type="number"
+                                min={3}
+                                step={1}
                                 className="form-control"
                                 value={numLetters}
                                 onChange={(e) =>
@@ -92,9 +104,10 @@ export function App(): JSX.Element {
                                 onClick={() => {
                                     generateGameContext().catch(
                                         (error: unknown) => {
-                                            console.error(
-                                                "Failed to generate game context:",
-                                                error,
+                                            setErrorMessage(
+                                                error instanceof Error
+                                                    ? error.message
+                                                    : "Could not start a game. Please try again.",
                                             );
                                         },
                                     );
@@ -106,6 +119,12 @@ export function App(): JSX.Element {
                     </tr>
                 </tbody>
             </table>
+
+            {errorMessage != null && (
+                <p className="text-danger mt-3" role="alert">
+                    {errorMessage}
+                </p>
+            )}
         </>
     );
 }
