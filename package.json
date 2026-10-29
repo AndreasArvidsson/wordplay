@@ -1,0 +1,42 @@
+{
+    "name": "cardmarket-helper",
+    "version": "0.1.0",
+    "description": "Helper tools for Cardmarket",
+    "author": "Andreas Arvidsson",
+    "license": "MIT",
+    "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/cursorless-dev/cardmarket-helper.git"
+    },
+    "funding": "https://github.com/sponsors/cardmarket-helper",
+    "sponsor": {
+        "url": "https://github.com/sponsors/cardmarket-helper"
+    },
+    "scripts": {
+        "optimize": "tsx scripts/optimize.ts",
+        "build": "npm run clean && tsc -p . && tsx ./scripts/build.ts",
+        "clean": "rm -rf out/*",
+        "lint": "npm run typecheck && npm run lint:ts && npm run lint:fmt",
+        "typecheck": "tsc -p . --noEmit",
+        "lint:ts": "oxlint -c oxlint.config.mts --deny-warnings .",
+        "lint:fmt": "oxfmt --check .",
+        "fix": "npm run fix:ts && npm run fix:fmt",
+        "fix:ts": "oxlint -c oxlint.config.mts --fix .",
+        "fix:fmt": "oxfmt .",
+        "test": "tsx ./test/runAllTests.ts",
+        "parseVocabulary": "tsx ./scripts/parseVocabulary.ts"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@types/mocha": "^10.0.10",
+        "@types/node": "^24.19.2",
+        "fast-glob": "^3.3.3",
+        "mocha": "^12.0.3",
+        "oxfmt": "^0.75.0",
+        "oxlint-tsgolint": "^7.0.2004",
+        "oxlint": "^1.90.0",
+        "tsx": "^4.23.15",
+        "typescript": "^7.0.2"
+    }
+}
