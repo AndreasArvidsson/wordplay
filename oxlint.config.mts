@@ -46,6 +46,7 @@ const disabledRules = [
     "promise/prefer-await-to-callbacks",
     "promise/prefer-await-to-then",
     "react-perf/jsx-no-new-function-as-prop",
+    "react-perf/jsx-no-new-object-as-prop",
     "react/jsx-max-depth",
     "react/jsx-no-literals",
     "react/no-array-index-key",
@@ -59,6 +60,7 @@ const disabledRules = [
     "unicorn/filename-case",
     "unicorn/no-array-callback-reference",
     "unicorn/no-array-for-each",
+    "unicorn/no-array-reduce",
     "unicorn/no-lonely-if",
     "unicorn/no-null",
     "unicorn/prefer-at",
@@ -70,6 +72,7 @@ const disabledRules = [
 
 // oxlint-disable-next-line import/no-default-export
 export default defineConfig({
+    ignorePatterns: ["node_modules", "docs"],
     options: {
         typeAware: true,
         typeCheck: true,

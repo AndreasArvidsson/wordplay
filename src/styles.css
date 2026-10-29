@@ -1,8 +1,18 @@
+.letter-row {
+    display: grid;
+    grid-template-columns: repeat(var(--letter-count), minmax(0, 1fr));
+    align-items: start;
+    width: calc(var(--letter-count) * 4rem);
+    max-width: 100%;
+    margin-inline: auto;
+}
+
 .btn-letter-selected,
 .btn-letter-available {
-    display: inline-block;
-    width: 3rem;
-    height: 3rem;
+    width: 75%;
+    aspect-ratio: 1;
+    padding: 0;
+    font-size: min(1.25rem, calc((100vw - 1.5rem) / var(--letter-count) * 0.4));
     color: #6c757d;
     background-color: white;
     border: 1px solid #6c757d;
@@ -14,16 +24,17 @@
     --bs-btn-disabled-opacity: 1;
 }
 
-.btn-letter-available:not(:first-child) {
-    margin-left: 1rem;
+.btn-letter-available {
+    justify-self: center;
 }
 
 .selected-letter-wrapper {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 4rem;
-    height: 4rem;
+    width: 100%;
+    min-width: 0;
+    aspect-ratio: 1;
     background-color: darkgray;
     vertical-align: top;
     border-top: 1px solid #6c757d;
@@ -43,8 +54,10 @@
 }
 
 .game-words {
-    width: max-content;
-    min-width: 24rem;
+    columns: var(--word-width) 5;
+    column-gap: 0.75rem;
+    width: max(24rem, calc(5 * var(--word-width) + 3.625rem));
+    max-width: 100%;
     margin-inline: auto;
     text-align: left;
     border: 1px solid #6c757d;
@@ -54,19 +67,18 @@
     background-color: grey;
 }
 
-.game-words table {
-    width: 100%;
-    height: 100%;
-    border-collapse: separate;
-}
-
-.game-words td + td {
-    padding-left: 0.75rem;
+.game-word {
+    display: flex;
+    min-width: 0;
+    break-inside: avoid;
+    margin-bottom: 0.125rem;
 }
 
 .word-letter {
     display: inline-block;
+    flex-shrink: 1;
     width: 1rem;
+    min-width: 0;
     height: 1.5rem;
     padding: 0 0.1rem;
     text-align: center;
@@ -83,6 +95,17 @@
 
 .game-buttons {
     width: 24rem;
+    max-width: 100%;
     margin-inline: auto;
     text-align: left;
+}
+
+.game-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.game-actions .btn {
+    padding-inline: clamp(0.25rem, 2vw, 0.75rem);
+    white-space: nowrap;
 }
