@@ -5,6 +5,8 @@ import { defineConfig } from "vite";
 // oxlint-disable-next-line import/no-default-export
 export default defineConfig((): UserConfig => {
     return {
+        base: "/wordplay/",
+
         resolve: {
             alias: {
                 "react-dom/test-utils": "preact/test-utils",
