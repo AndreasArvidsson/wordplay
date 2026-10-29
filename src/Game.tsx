@@ -14,6 +14,7 @@ export function Game({ letters, words }: Props): JSX.Element {
         getDefaultSelected(letters.length),
     );
     const [lastSubmission, setLastSubmission] = useState<(Letter | null)[]>();
+    const [solvedWords, setSolvedWords] = useState<Word[]>([]);
 
     const selectLetter = (letter: Letter) => {
         const copy = selectedLetters.slice();
@@ -49,9 +50,56 @@ export function Game({ letters, words }: Props): JSX.Element {
             .map((s) => s?.letter ?? "")
             .join("")
             .toLowerCase();
+        const foundWord = words.find((w) => w.word === word);
+
+        if (foundWord != null && !solvedWords.includes(foundWord)) {
+            setSolvedWords([...solvedWords, foundWord]);
+        }
+
         setLastSubmission(selectedLetters);
         resetSelectedLetters();
-        console.log(word);
+    };
+
+    const giveUp = () => {
+        setSolvedWords(words);
+    };
+
+    const renderWords = () => {
+        const columnCount = 5;
+        const rowCount = Math.ceil(words.length / columnCount);
+
+        return (
+            <div className="game-words">
+                <table>
+                    <tbody>
+                        {Array.from({ length: rowCount }, (_r, row) => (
+                            <tr key={row}>
+                                {Array.from(
+                                    { length: columnCount },
+                                    (_c, column) => {
+                                        const index = column * rowCount + row;
+
+                                        if (index > words.length - 1) {
+                                            return <td key={column} />;
+                                        }
+
+                                        const word = words[index];
+                                        const isSolved =
+                                            solvedWords.includes(word);
+
+                                        return (
+                                            <td key={column}>
+                                                {renderWord(word, isSolved)}
+                                            </td>
+                                        );
+                                    },
+                                )}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        );
     };
 
     const renderSelected = () => {
@@ -102,43 +150,55 @@ export function Game({ letters, words }: Props): JSX.Element {
             (s) => s != null,
         ).length;
         return (
-            <div className="mt-3 button-row">
-                <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={shuffleLetters}
-                >
-                    Shuffle
-                </button>
-                <button
-                    type="button"
-                    className="btn btn-primary ms-3"
-                    disabled={lastSubmission == null}
-                    onClick={useLastSubmission}
-                >
-                    Last
-                </button>
-                <button
-                    type="button"
-                    className="btn btn-primary ms-3 float-end"
-                    disabled={numSelectedLetters < 3}
-                    onClick={submitSelectedLetters}
-                >
-                    Enter
-                </button>
-                <button
-                    type="button"
-                    className="btn btn-primary float-end"
-                    onClick={resetSelectedLetters}
-                >
-                    Clear
-                </button>
-            </div>
+            <>
+                <div className="mt-4 game-buttons">
+                    <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={shuffleLetters}
+                    >
+                        Shuffle
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-primary ms-3"
+                        disabled={lastSubmission == null}
+                        onClick={useLastSubmission}
+                    >
+                        Last
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-primary ms-3 float-end"
+                        disabled={numSelectedLetters < 3}
+                        onClick={submitSelectedLetters}
+                    >
+                        Enter
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-primary float-end"
+                        onClick={resetSelectedLetters}
+                    >
+                        Clear
+                    </button>
+                </div>
+                <div className="mt-5 game-buttons">
+                    <button
+                        type="button"
+                        className="btn btn-danger"
+                        onClick={giveUp}
+                    >
+                        Give up
+                    </button>
+                </div>
+            </>
         );
     };
 
     return (
         <div className="text-center">
+            {renderWords()}
             {renderSelected()}
             {renderAvailable()}
             {renderButtons()}
@@ -148,4 +208,13 @@ export function Game({ letters, words }: Props): JSX.Element {
 
 function getDefaultSelected(length: number): (Letter | null)[] {
     return Array.from({ length }, () => null);
+}
+
+function renderWord(word: Word, isSolved: boolean): JSX.Element[] {
+    const letters = word.word.split("");
+    return letters.map((letter, index) => (
+        <span key={index} className="word-letter">
+            {isSolved ? letter.toUpperCase() : undefined}
+        </span>
+    ));
 }

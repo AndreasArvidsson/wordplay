@@ -1,3 +1,5 @@
+import { shuffleList } from "./shuffleList";
+
 const vowels = ["A", "E", "I", "O", "U"];
 
 // oxfmt-ignore
@@ -47,13 +49,7 @@ export function generateLetters(numLetters: number): string[] {
         letters.push(drawLetter(consonantPool));
     }
 
-    // Fisher-Yates shuffle
-    for (let i = letters.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [letters[i], letters[j]] = [letters[j], letters[i]];
-    }
-
-    return letters;
+    return shuffleList(letters);
 }
 
 function getVowelCount(numLetters: number): number {

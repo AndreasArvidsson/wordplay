@@ -13,7 +13,7 @@ export function findWords(
         letterCounts.set(letterNormalized, count + 1);
     }
 
-    return vocabulary.filter(({ word, familiarityScore }) => {
+    const filteredWords = vocabulary.filter(({ word, familiarityScore }) => {
         if (word.length < 3 || word.length > letters.length) {
             return false;
         }
@@ -37,4 +37,10 @@ export function findWords(
 
         return true;
     });
+
+    filteredWords.sort(
+        (a, b) => a.word.length - b.word.length || a.word.localeCompare(b.word),
+    );
+
+    return filteredWords;
 }

@@ -11,7 +11,6 @@
 
 ## Todo
 
-- Twist
 - Clues
 - Score
 - Local storage of settings and scores
