@@ -95,12 +95,21 @@
     vertical-align: top;
 }
 
-.word-letter.given-up,
-.word-letter.has-clues {
+.word-letter.given-up {
     background-color: lightskyblue;
 }
 
 .game-buttons {
+    width: 24rem;
+    max-width: 100%;
+    margin-inline: auto;
+    text-align: left;
+}
+
+.game-clues {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     width: 24rem;
     max-width: 100%;
     margin-inline: auto;

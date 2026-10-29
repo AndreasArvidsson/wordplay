@@ -24,5 +24,7 @@ export function generateLetters(
     }
 
     const index = Math.floor(Math.random() * candidates.length);
-    return shuffleList(candidates[index].text.toUpperCase().split(""));
+    const letters = candidates[index].text.toUpperCase().split("");
+
+    return shuffleList(letters);
 }

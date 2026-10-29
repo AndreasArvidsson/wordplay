@@ -103,14 +103,10 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             (sw) => !sw.isSolved && sw.numCluesUsed === 0,
         );
 
-        if (unsolvedWords.length === 0) {
-            return;
+        if (unsolvedWords.length > 0) {
+            unsolvedWords[0].numCluesUsed++;
+            setSolvedWords(solvedWords.slice());
         }
-
-        const randomIndex = Math.floor(Math.random() * unsolvedWords.length);
-        const randomWord = unsolvedWords[randomIndex];
-        randomWord.numCluesUsed++;
-        setSolvedWords(solvedWords.slice());
     };
 
     const giveUp = () => {
@@ -295,6 +291,32 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
         );
     };
 
+    const renderClues = () => {
+        return (
+            <div className="game-clues mt-2">
+                {solvedWords.map((word) => {
+                    const clues =
+                        word.numCluesUsed > 0 && !word.isSolved
+                            ? word.word.clues?.slice(0, word.numCluesUsed)
+                            : undefined;
+                    if (clues == null) {
+                        return null;
+                    }
+                    return (
+                        <div key={word.word.text}>
+                            {word.word.text.length} letters:
+                            <ul>
+                                {clues.map((clue, index) => (
+                                    <li key={index}>{clue}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    };
+
     const renderGiveUpButton = () => {
         if (isDone) {
             return (
@@ -348,6 +370,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             {renderSelected()}
             {renderAvailable()}
             {renderButtons()}
+            {renderClues()}
             {renderGiveUpButton()}
         </div>
     );
@@ -386,20 +409,11 @@ function getDefaultSelected(length: number): (Letter | null)[] {
 
 function renderWord(word: SolvedWord): JSX.Element[] {
     const letters = word.word.text.split("");
-    const clues =
-        word.numCluesUsed > 0
-            ? word.word.clues?.slice(0, word.numCluesUsed)
-            : undefined;
 
     return letters.map((letter, index) => (
         <span
             key={index}
-            className={classNames(
-                "word-letter",
-                word.isGivenUp && "given-up",
-                clues != null && "has-clues",
-            )}
-            title={clues?.join("\n")}
+            className={classNames("word-letter", word.isGivenUp && "given-up")}
         >
             {word.isSolved || word.isGivenUp ? letter.toUpperCase() : undefined}
         </span>
