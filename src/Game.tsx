@@ -144,6 +144,30 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
         return () => globalThis.removeEventListener("keydown", handleKeyDown);
     });
 
+    const renderScore = () => {
+        const { score, maxScore, numSolved } = getScores(solvedWords);
+        return (
+            <div className="mb-3">
+                <div
+                    className="d-flex justify-content-center gap-4 mb-1"
+                    role="status"
+                >
+                    <span>
+                        Score: <strong>{score}</strong> / {maxScore}
+                    </span>
+                    <span>
+                        Words solved: <strong>{numSolved}</strong> /{" "}
+                        {solvedWords.length}
+                    </span>
+                </div>
+                <div className="small text-muted">
+                    Each word earns its letter count squared in points (3
+                    letters = 9 points).
+                </div>
+            </div>
+        );
+    };
+
     const renderWords = () => {
         const columnCount = 5;
         const rowCount = Math.ceil(solvedWords.length / columnCount);
@@ -293,6 +317,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
 
     return (
         <div className="text-center">
+            {renderScore()}
             {renderWords()}
             {renderSelected()}
             {renderAvailable()}
@@ -300,6 +325,31 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             {renderGiveUpButton()}
         </div>
     );
+}
+
+function getScores(solvedWords: SolvedWord[]): {
+    score: number;
+    maxScore: number;
+    numSolved: number;
+} {
+    let score = 0;
+    let maxScore = 0;
+    let numSolved = 0;
+
+    for (const sw of solvedWords) {
+        const wordScore = getWordScore(sw.word);
+        maxScore += wordScore;
+        if (sw.isSolved) {
+            score += wordScore;
+            numSolved++;
+        }
+    }
+
+    return { score, maxScore, numSolved };
+}
+
+function getWordScore(word: Word): number {
+    return word.word.length ** 2;
 }
 
 function getDefaultSelected(length: number): (Letter | null)[] {

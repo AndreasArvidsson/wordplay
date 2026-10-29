@@ -2,6 +2,12 @@
 
 Play online at [https://AndreasArvidsson.github.io/wordplay](https://AndreasArvidsson.github.io/wordplay)
 
+## Scoring
+
+Each solved word earns its letter count squared in points: 3 letters earn 9
+points, 4 letters earn 16, and 6 letters earn 36. Each word scores only once.
+Words revealed by giving up do not earn points.
+
 ## Vocabulary source
 
 [Linguabase](https://huggingface.co/datasets/linguabase/linguabase)
@@ -14,6 +20,5 @@ Play online at [https://AndreasArvidsson.github.io/wordplay](https://AndreasArvi
 ## Todo
 
 - Clues
-- Score
 - Local storage of settings and scores
 - timed
