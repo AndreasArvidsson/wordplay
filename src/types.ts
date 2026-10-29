@@ -3,8 +3,3 @@ export interface Word {
     familiarityScore: number;
     definition?: string;
 }
-
-export interface GameContext {
-    letters: string[];
-    words: Word[];
-}

@@ -47,6 +47,7 @@ const disabledRules = [
     "react-perf/jsx-no-new-function-as-prop",
     "react/jsx-max-depth",
     "react/jsx-no-literals",
+    "react/no-array-index-key",
     "react/react-in-jsx-scope",
     "typescript/explicit-function-return-type",
     "typescript/no-unnecessary-type-parameters",
