@@ -1,8 +1,9 @@
+import path from "node:path";
 import type { UserConfig } from "vite";
 import { defineConfig } from "vite";
 
 // oxlint-disable-next-line import/no-default-export
-export default defineConfig(({ mode, command }): UserConfig => {
+export default defineConfig((): UserConfig => {
     return {
         resolve: {
             alias: {
@@ -15,7 +16,7 @@ export default defineConfig(({ mode, command }): UserConfig => {
         },
 
         build: {
-            outDir: "out",
+            outDir: path.join(import.meta.dirname, "out"),
             target: "es2020",
             sourcemap: true,
             emptyOutDir: false,

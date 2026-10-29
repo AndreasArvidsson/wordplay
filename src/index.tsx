@@ -1,4 +1,16 @@
 import { render } from "preact";
-import { getRootElement } from "./getRootElement.js";
+import { App } from "./App.js";
+// oxlint-disable-next-line import/no-unassigned-import
+import "bootstrap/dist/css/bootstrap.min.css";
 
-render(<main>hello</main>, getRootElement());
+render(<App />, getRootElement());
+
+function getRootElement(): HTMLElement {
+    const root = document.getElementById("root");
+
+    if (root == null) {
+        throw new Error("Missing root element");
+    }
+
+    return root;
+}

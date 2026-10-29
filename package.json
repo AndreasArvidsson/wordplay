@@ -14,7 +14,7 @@
         "url": "https://github.com/sponsors/cardmarket-helper"
     },
     "scripts": {
-        "run": "vite",
+        "dev": "vite",
         "build": "npm run clean && vite build",
         "clean": "rm -rf out/*",
         "lint": "npm run typecheck && npm run lint:ts && npm run lint:fmt",

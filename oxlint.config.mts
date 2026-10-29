@@ -44,7 +44,10 @@ const disabledRules = [
     "oxc/no-rest-spread-properties",
     "promise/avoid-new",
     "promise/prefer-await-to-callbacks",
+    "react-perf/jsx-no-new-function-as-prop",
+    "react/jsx-max-depth",
     "react/jsx-no-literals",
+    "react/react-in-jsx-scope",
     "typescript/explicit-function-return-type",
     "typescript/no-unnecessary-type-parameters",
     "typescript/parameter-properties",
@@ -61,7 +64,6 @@ const disabledRules = [
     "unicorn/prefer-spread",
     "unicorn/prefer-top-level-await",
     "unicorn/switch-case-braces",
-    "react/react-in-jsx-scope",
 ];
 
 // oxlint-disable-next-line import/no-default-export
@@ -98,10 +100,6 @@ export default defineConfig({
 
     rules: {
         ...Object.fromEntries(disabledRules.map((r) => [r, "off"])),
-        "react/jsx-filename-extension": [
-            "warn",
-            { extensions: [".jsx", ".tsx"] },
-        ],
         "eslint/eqeqeq": [
             "warn",
             "always",
@@ -144,6 +142,16 @@ export default defineConfig({
                             "Only files in src/node may import from src/node.",
                     },
                 ],
+            },
+        ],
+        "react/jsx-filename-extension": [
+            "warn",
+            { extensions: [".jsx", ".tsx"] },
+        ],
+        "typescript/no-confusing-void-expression": [
+            "warn",
+            {
+                ignoreArrowShorthand: true,
             },
         ],
     },
