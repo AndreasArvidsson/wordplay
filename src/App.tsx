@@ -1,13 +1,19 @@
 import type { JSX } from "preact";
 import { useState } from "preact/hooks";
-import vocabulary from "../assets/vocabulary.json";
 import { findWords } from "./findWords";
 import { Game } from "./Game.js";
 import { generateLetters } from "./generateLetters.js";
-import type { Word } from "./types";
+import type { Letter, Word } from "./types";
 
 const context = {
-    letters: ["A", "D", "O", "B", "U", "I"],
+    letters: [
+        { letter: "A", id: `A0` },
+        { letter: "D", id: `D1` },
+        { letter: "O", id: `O2` },
+        { letter: "B", id: `B3` },
+        { letter: "U", id: `U4` },
+        { letter: "I", id: `I5` },
+    ],
     words: [
         {
             word: "aid",
@@ -73,7 +79,7 @@ const context = {
 };
 
 interface GameContext {
-    letters: string[];
+    letters: Letter[];
     words: Word[];
 }
 
@@ -88,8 +94,12 @@ export function App(): JSX.Element {
 
     const generateGameContext = () => {
         const letters = generateLetters(numLetters);
+        const lettersWithId = letters.map((letter, index) => ({
+            id: `letter${index}`,
+            letter,
+        }));
         const words = findWords(letters, includeUnfamiliarWords, vocabulary);
-        setGameContext({ letters, words });
+        setGameContext({ letters: lettersWithId, words });
     };
 
     return (

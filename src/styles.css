@@ -41,3 +41,9 @@
 .selected-letter-wrapper:not(:first-child) {
     border-left: 1px solid #6c757d;
 }
+
+.button-row {
+    width: 24rem;
+    margin-inline: auto;
+    text-align: left;
+}
