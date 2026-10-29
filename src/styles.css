@@ -77,6 +77,10 @@
     vertical-align: top;
 }
 
+.word-letter.given-up {
+    background-color: lightskyblue;
+}
+
 .game-buttons {
     width: 24rem;
     margin-inline: auto;

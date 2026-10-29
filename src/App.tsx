@@ -165,11 +165,22 @@ interface GameContext {
 export function App(): JSX.Element {
     const [numLetters, setNumLetters] = useState(6);
     const [includeUnfamiliarWords, setIncludeUnfamiliarWords] = useState(false);
-    const [gameContext, setGameContext] = useState<GameContext>(context);
+    const [gameContext, setGameContext] = useState<GameContext | undefined>(
+        context,
+    );
+
+    const exitGame = () => {
+        setGameContext(undefined);
+    };
 
     if (gameContext != null) {
-        console.log(gameContext);
-        return <Game letters={gameContext.letters} words={gameContext.words} />;
+        return (
+            <Game
+                letters={gameContext.letters}
+                words={gameContext.words}
+                exitGame={exitGame}
+            />
+        );
     }
 
     const generateGameContext = () => {
@@ -201,6 +212,7 @@ export function App(): JSX.Element {
                             />
                         </td>
                     </tr>
+
                     <tr>
                         <td className="pe-3">Include unfamiliar words</td>
                         <td>
@@ -216,6 +228,7 @@ export function App(): JSX.Element {
                             />
                         </td>
                     </tr>
+
                     <tr>
                         <td />
                         <td>
