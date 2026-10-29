@@ -14,6 +14,7 @@ interface SolvedWord {
     word: Word;
     isSolved: boolean;
     isGivenUp: boolean;
+    numCluesUsed: number;
 }
 
 export function Game({ letters, words, exitGame }: Props): JSX.Element {
@@ -27,6 +28,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             word,
             isSolved: false,
             isGivenUp: false,
+            numCluesUsed: 0,
         })),
     );
     const isDone = solvedWords.every((sw) => sw.isSolved || sw.isGivenUp);
@@ -79,6 +81,36 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
 
         setLastSubmission(selectedLetters);
         resetSelectedLetters();
+    };
+
+    const useClue = () => {
+        // First, try to use a clue for a word that already has clues in progress.
+        const cluesInProgress = solvedWords.find(
+            (sw) =>
+                !sw.isSolved &&
+                sw.numCluesUsed > 0 &&
+                sw.numCluesUsed < sw.word.word.length,
+        );
+
+        if (cluesInProgress != null) {
+            cluesInProgress.numCluesUsed++;
+            setSolvedWords(solvedWords.slice());
+            return;
+        }
+
+        // If no clues are in progress, pick a random unsolved word with no clues used yet.
+        const unsolvedWords = solvedWords.filter(
+            (sw) => !sw.isSolved && sw.numCluesUsed === 0,
+        );
+
+        if (unsolvedWords.length === 0) {
+            return;
+        }
+
+        const randomIndex = Math.floor(Math.random() * unsolvedWords.length);
+        const randomWord = unsolvedWords[randomIndex];
+        randomWord.numCluesUsed++;
+        setSolvedWords(solvedWords.slice());
     };
 
     const giveUp = () => {
@@ -156,17 +188,13 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
                     className="d-flex flex-wrap justify-content-center gap-2 column-gap-4 mb-1"
                     role="status"
                 >
-                    <span>
+                    <span title="Each word earns its letter count squared in points (3 letters = 9 points).">
                         Score: <strong>{score}</strong> / {maxScore}
                     </span>
                     <span>
                         Words solved: <strong>{numSolved}</strong> /{" "}
                         {solvedWords.length}
                     </span>
-                </div>
-                <div className="small text-muted">
-                    Each word earns its letter count squared in points (3
-                    letters = 9 points).
                 </div>
             </div>
         );
@@ -283,13 +311,21 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
         }
 
         return (
-            <div className="mt-5 game-buttons">
+            <div className="mt-5 game-buttons game-actions">
                 <button
                     type="button"
                     className="btn btn-danger"
                     onClick={giveUp}
                 >
                     Give up
+                </button>
+                <button
+                    type="button"
+                    className="btn btn-primary ms-auto"
+                    disabled={isDone}
+                    onClick={useClue}
+                >
+                    Clue
                 </button>
             </div>
         );
@@ -300,7 +336,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             className="text-center"
             style={{
                 "--letter-count": letters.length,
-                "--word-width": `${longestWordLength * 1.1}rem`,
+                "--word-width": `${longestWordLength * 1.35}rem`,
             }}
         >
             {renderScore()}
@@ -325,9 +361,11 @@ function getScores(solvedWords: SolvedWord[]): {
     for (const sw of solvedWords) {
         const wordScore = getWordScore(sw.word);
         maxScore += wordScore;
+
         if (sw.isSolved) {
-            score += wordScore;
             numSolved++;
+            const multiplier = Math.max(0.25, 1 - sw.numCluesUsed * 0.15);
+            score += Math.round(wordScore * multiplier);
         }
     }
 
@@ -344,10 +382,20 @@ function getDefaultSelected(length: number): (Letter | null)[] {
 
 function renderWord(word: SolvedWord): JSX.Element[] {
     const letters = word.word.word.split("");
+    const clues =
+        word.numCluesUsed > 0
+            ? word.word.clues?.slice(0, word.numCluesUsed)
+            : undefined;
+
     return letters.map((letter, index) => (
         <span
             key={index}
-            className={classNames("word-letter", word.isGivenUp && "given-up")}
+            className={classNames(
+                "word-letter",
+                word.isGivenUp && "given-up",
+                clues != null && "has-clues",
+            )}
+            title={clues?.join("\n")}
         >
             {word.isSolved || word.isGivenUp ? letter.toUpperCase() : undefined}
         </span>

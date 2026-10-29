@@ -15,10 +15,10 @@ const scoresLabelsFile = path.resolve(
     import.meta.dirname,
     "../assets/scores_labels.core.tsv.gz",
 );
-// const cluesFile = path.resolve(
-//     import.meta.dirname,
-//     "../assets/clues.core.tsv.gz",
-// );
+const cluesFile = path.resolve(
+    import.meta.dirname,
+    "../assets/clues.core.tsv.gz",
+);
 const outputJsonFile = path.resolve(
     import.meta.dirname,
     "../assets/vocabulary.json",
@@ -55,35 +55,35 @@ const scoresLabels = readTsv(scoresLabelsFile, [
     "religiosity",
     "content_rating",
 ]);
-// const clues = readTsv(cluesFile, [
-//     "word",
-//     "clue_W1",
-//     "clue_W2",
-//     "clue_W3",
-//     "clue_W4",
-//     "clue_W5",
-//     "clue_SYN",
-//     "clue_DEF",
-//     "clue_CAT",
-//     "clue_FUN",
-//     "clue_ASS",
-//     "clue_PRO",
-//     "clue_CON",
-//     "clue_FIG",
-//     "clue_EX",
-//     "clue_ACT",
-//     "clue_NEG",
-//     "clue_SIT",
-//     "clue_LOC",
-//     "clue_SND",
-//     "clue_OBV",
-//     "clue_L1",
-//     "clue_L2",
-//     "clue_L3",
-//     "clue_E1",
-//     "clue_E2",
-//     "clue_E3",
-// ]);
+const clues = readTsv(cluesFile, [
+    "word",
+    "clue_W1",
+    "clue_W2",
+    "clue_W3",
+    "clue_W4",
+    "clue_W5",
+    "clue_SYN",
+    "clue_DEF",
+    "clue_CAT",
+    "clue_FUN",
+    "clue_ASS",
+    "clue_PRO",
+    "clue_CON",
+    "clue_FIG",
+    "clue_EX",
+    "clue_ACT",
+    "clue_NEG",
+    "clue_SIT",
+    "clue_LOC",
+    "clue_SND",
+    "clue_OBV",
+    "clue_L1",
+    "clue_L2",
+    "clue_L3",
+    "clue_E1",
+    "clue_E2",
+    "clue_E3",
+]);
 
 const wordMap = new Map<string, Word>();
 
@@ -158,7 +158,24 @@ for await (const row of definitions) {
     }
 }
 
-// TODO: Parse clues and associate them with the corresponding words in the wordMap.
+for await (const row of clues) {
+    const [word, clueW1, clueW2, clueW3, clueW4, clueW5] = row;
+    const wordObj = wordMap.get(word);
+
+    if (wordObj != null) {
+        const wordClues = [clueW1, clueW2, clueW3, clueW4, clueW5]
+            .map(stripTrailingStar)
+            .filter((clue) => clue.length > 0 && clue !== "n/a");
+
+        if (wordClues.length > 0) {
+            wordObj.clues = wordClues;
+        }
+    }
+}
+
+function stripTrailingStar(word: string): string {
+    return word.replace(/[ *]+$/u, "").trim();
+}
 
 const words = Array.from(wordMap.values());
 

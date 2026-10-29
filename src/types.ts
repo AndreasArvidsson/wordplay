@@ -2,6 +2,7 @@ export interface Word {
     word: string;
     familiarityScore: number;
     definition?: string;
+    clues?: string[];
 }
 
 export interface Letter {
