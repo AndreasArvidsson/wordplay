@@ -312,20 +312,22 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     const renderAvailable = () => {
         return (
             <div className="mt-3 letter-row">
-                {shuffledLetters.map((letter) => (
-                    <button
-                        key={letter.id}
-                        type="button"
-                        className="btn btn-lg btn-outline-secondary btn-letter-available"
-                        disabled={
-                            isDone ||
-                            selectedLetters.some((s) => s?.id === letter.id)
-                        }
-                        onClick={() => selectLetter(letter)}
-                    >
-                        {letter.letter}
-                    </button>
-                ))}
+                {shuffledLetters.map((letter) => {
+                    const isSelected = selectedLetters.some(
+                        (s) => s?.id === letter.id,
+                    );
+                    return (
+                        <button
+                            key={letter.id}
+                            type="button"
+                            className="btn btn-lg btn-outline-secondary btn-letter-available"
+                            disabled={isDone || isSelected}
+                            onClick={() => selectLetter(letter)}
+                        >
+                            {!isSelected && letter.letter}
+                        </button>
+                    );
+                })}
             </div>
         );
     };
