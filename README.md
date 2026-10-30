@@ -26,6 +26,6 @@ The maximum score shown is the total possible score without using clues.
 
 ## Todo
 
-- Clues
+- Rounds
 - Local storage of settings and scores
 - timed

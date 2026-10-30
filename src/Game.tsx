@@ -273,7 +273,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
                 </button>
                 <button
                     type="button"
-                    className="btn btn-primary ms-auto"
+                    className="btn btn-primary"
                     disabled={isDone}
                     onClick={resetSelectedLetters}
                 >
@@ -281,7 +281,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
                 </button>
                 <button
                     type="button"
-                    className="btn btn-primary"
+                    className="btn btn-success ms-auto"
                     disabled={isDone || numSelectedLetters < 3}
                     onClick={submitSelectedLetters}
                 >
@@ -296,7 +296,9 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             <div className="game-clues mt-2">
                 {solvedWords.map((word) => {
                     const clues =
-                        word.numCluesUsed > 0 && !word.isSolved
+                        word.numCluesUsed > 0 &&
+                        !word.isSolved &&
+                        !word.isGivenUp
                             ? word.word.clues?.slice(0, word.numCluesUsed)
                             : undefined;
                     if (clues == null) {
