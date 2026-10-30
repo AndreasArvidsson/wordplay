@@ -67,9 +67,8 @@ body {
     border-right: 1px solid #6c757d;
 }
 
-.game-words {
-    columns: var(--word-width) var(--word-columns);
-    column-gap: 0.75rem;
+.game-words,
+.game-definition {
     width: max(
         24rem,
         calc(
@@ -77,6 +76,11 @@ body {
                 (var(--word-columns) - 1) * 0.75rem + 0.625rem
         )
     );
+}
+
+.game-words {
+    columns: var(--word-width) var(--word-columns);
+    column-gap: 0.75rem;
     max-width: 100%;
     margin-inline: auto;
     text-align: left;
@@ -138,4 +142,8 @@ body {
 .game-actions .btn {
     padding-inline: clamp(0.25rem, 2vw, 0.75rem);
     white-space: nowrap;
+}
+
+.game-word-button {
+    min-width: 0;
 }

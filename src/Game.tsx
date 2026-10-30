@@ -23,6 +23,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
         getDefaultSelected(letters.length),
     );
     const [lastSubmission, setLastSubmission] = useState<(Letter | null)[]>();
+    const [definitionWord, setDefinitionWord] = useState<Word>();
     const [solvedWords, setSolvedWords] = useState<SolvedWord[]>(
         words.map((word) => ({
             word,
@@ -118,6 +119,10 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
         resetSelectedLetters();
     };
 
+    const closeDefinition = () => {
+        setDefinitionWord(undefined);
+    };
+
     useLayoutEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (
@@ -137,6 +142,14 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
 
             switch (event.key) {
                 case "Enter":
+                    if (
+                        event.target instanceof Element &&
+                        event.target.closest(
+                            ".game-word-button, #game-definition button, a[href]",
+                        ) != null
+                    ) {
+                        return;
+                    }
                     event.preventDefault();
                     if (numSelectedLetters >= 3) {
                         submitSelectedLetters();
@@ -196,6 +209,39 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
         );
     };
 
+    const renderWord = (word: SolvedWord): JSX.Element | JSX.Element[] => {
+        const wordLetters = word.word.text.split("").map((letter, index) => (
+            <span
+                key={index}
+                className={classNames(
+                    "word-letter",
+                    word.isGivenUp && "given-up",
+                )}
+            >
+                {word.isSolved || word.isGivenUp
+                    ? letter.toUpperCase()
+                    : undefined}
+            </span>
+        ));
+
+        if (
+            (!word.isSolved && !word.isGivenUp) ||
+            word.word.definition == null
+        ) {
+            return wordLetters;
+        }
+
+        return (
+            <button
+                type="button"
+                className="game-word-button btn focus-ring d-flex p-0 border-0 rounded-1 text-body"
+                onClick={() => setDefinitionWord(word.word)}
+            >
+                {wordLetters}
+            </button>
+        );
+    };
+
     const renderWords = () => {
         return (
             <div className="game-words">
@@ -205,6 +251,38 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
                     </div>
                 ))}
             </div>
+        );
+    };
+
+    const renderDefinition = () => {
+        if (definitionWord == null) {
+            return null;
+        }
+
+        return (
+            <section
+                id="game-definition"
+                className="game-definition mw-100 mx-auto mb-3 p-3 text-start border border-secondary rounded text-break"
+            >
+                <div className="d-flex align-items-center justify-content-between gap-2">
+                    <h2 id="game-definition-word" className="h6 mb-0">
+                        {definitionWord.text.toUpperCase()}
+                    </h2>
+                    <button
+                        type="button"
+                        className="btn-close flex-shrink-0 p-2"
+                        aria-label="Close definition"
+                        onClick={closeDefinition}
+                    />
+                </div>
+                <div
+                    className="mt-2"
+                    // oxlint-disable-next-line react/no-danger
+                    dangerouslySetInnerHTML={{
+                        __html: definitionWord.definition ?? "",
+                    }}
+                />
+            </section>
         );
     };
 
@@ -345,7 +423,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
                 </button>
                 <button
                     type="button"
-                    className="btn btn-primary ms-auto"
+                    className="btn btn-secondary ms-auto"
                     disabled={isDone}
                     onClick={useClue}
                 >
@@ -369,6 +447,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
         >
             {renderScore()}
             {renderWords()}
+            {renderDefinition()}
             {renderSelected()}
             {renderAvailable()}
             {renderButtons()}
@@ -407,17 +486,4 @@ function getWordScore(word: Word): number {
 
 function getDefaultSelected(length: number): (Letter | null)[] {
     return Array.from({ length }, () => null);
-}
-
-function renderWord(word: SolvedWord): JSX.Element[] {
-    const letters = word.word.text.split("");
-
-    return letters.map((letter, index) => (
-        <span
-            key={index}
-            className={classNames("word-letter", word.isGivenUp && "given-up")}
-        >
-            {word.isSolved || word.isGivenUp ? letter.toUpperCase() : undefined}
-        </span>
-    ));
 }
