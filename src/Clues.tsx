@@ -11,11 +11,13 @@ export function Clues({ words }: Props): JSX.Element {
             {words.map((word) => {
                 const clues =
                     word.numCluesUsed > 0 && !word.isSolved && !word.isGivenUp
-                        ? word.word.clues?.slice(0, word.numCluesUsed)
+                        ? word.clues.slice(0, word.numCluesUsed)
                         : undefined;
+
                 if (clues == null) {
                     return null;
                 }
+
                 return (
                     <div key={word.word.text}>
                         {word.word.text.length} letters:

@@ -8,6 +8,7 @@ import { GameScores } from "./GameScores";
 import { GameWords } from "./GameWords";
 import { SelectedLetters } from "./SelectedLetters";
 import type { GameWord, Letter, Word } from "./types";
+import { createGameWord } from "./util/createGameWord";
 import { shuffleList } from "./util/shuffleList";
 import { WordDefinition } from "./WordDefinition";
 
@@ -25,12 +26,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     const [lastSubmission, setLastSubmission] = useState<(Letter | null)[]>();
     const [definitionWord, setDefinitionWord] = useState<Word>();
     const [gameWords, setGameWords] = useState<GameWord[]>(
-        words.map((word) => ({
-            word,
-            isSolved: false,
-            isGivenUp: false,
-            numCluesUsed: 0,
-        })),
+        words.map((word) => createGameWord(word)),
     );
 
     const isDone = gameWords.every((sw) => sw.isSolved || sw.isGivenUp);
@@ -85,27 +81,12 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     };
 
     const useClue = () => {
-        // First, try to use a clue for a word that already has clues in progress.
-        const cluesInProgress = gameWords.find(
-            (sw) =>
-                !sw.isSolved &&
-                sw.numCluesUsed > 0 &&
-                sw.numCluesUsed < sw.word.text.length,
+        const word = gameWords.find(
+            (w) => !w.isSolved && w.numCluesUsed < w.clues.length,
         );
 
-        if (cluesInProgress != null) {
-            cluesInProgress.numCluesUsed++;
-            setGameWords(gameWords.slice());
-            return;
-        }
-
-        // If no clues are in progress, pick a random unsolved word with no clues used yet.
-        const unsolvedWords = gameWords.filter(
-            (sw) => !sw.isSolved && sw.numCluesUsed === 0,
-        );
-
-        if (unsolvedWords.length > 0) {
-            unsolvedWords[0].numCluesUsed++;
+        if (word != null) {
+            word.numCluesUsed++;
             setGameWords(gameWords.slice());
         }
     };
