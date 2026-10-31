@@ -1,20 +1,13 @@
 import type { JSX } from "preact";
 import { useLayoutEffect, useState } from "preact/hooks";
-import { classNames } from "./classNames";
+import { GameWordComponent } from "./GameWordComponent";
 import { shuffleList } from "./shuffleList";
-import type { Letter, Word } from "./types";
+import type { GameWord, Letter, Word } from "./types";
 
 interface Props {
     letters: Letter[];
     words: Word[];
     exitGame: () => void;
-}
-
-interface SolvedWord {
-    word: Word;
-    isSolved: boolean;
-    isGivenUp: boolean;
-    numCluesUsed: number;
 }
 
 export function Game({ letters, words, exitGame }: Props): JSX.Element {
@@ -24,7 +17,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     );
     const [lastSubmission, setLastSubmission] = useState<(Letter | null)[]>();
     const [definitionWord, setDefinitionWord] = useState<Word>();
-    const [solvedWords, setSolvedWords] = useState<SolvedWord[]>(
+    const [solvedWords, setSolvedWords] = useState<GameWord[]>(
         words.map((word) => ({
             word,
             isSolved: false,
@@ -209,45 +202,15 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
         );
     };
 
-    const renderWord = (word: SolvedWord): JSX.Element | JSX.Element[] => {
-        const wordLetters = word.word.text.split("").map((letter, index) => (
-            <span
-                key={index}
-                className={classNames(
-                    "word-letter",
-                    word.isGivenUp && "given-up",
-                )}
-            >
-                {word.isSolved || word.isGivenUp
-                    ? letter.toUpperCase()
-                    : undefined}
-            </span>
-        ));
-
-        if (
-            (!word.isSolved && !word.isGivenUp) ||
-            word.word.definition == null
-        ) {
-            return wordLetters;
-        }
-
-        return (
-            <button
-                type="button"
-                className="game-word-button btn focus-ring d-flex p-0 border-0 rounded-1 text-body"
-                onClick={() => setDefinitionWord(word.word)}
-            >
-                {wordLetters}
-            </button>
-        );
-    };
-
     const renderWords = () => {
         return (
             <div className="game-words">
                 {solvedWords.map((word) => (
                     <div key={word.word.text} className="game-word">
-                        {renderWord(word)}
+                        <GameWordComponent
+                            word={word}
+                            onClick={() => setDefinitionWord(word.word)}
+                        />
                     </div>
                 ))}
             </div>
@@ -459,7 +422,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     );
 }
 
-function getScores(solvedWords: SolvedWord[]): {
+function getScores(solvedWords: GameWord[]): {
     score: number;
     maxScore: number;
     numSolved: number;

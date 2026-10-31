@@ -5,6 +5,13 @@ export interface Word {
     clues?: string[];
 }
 
+export interface GameWord {
+    word: Word;
+    isSolved: boolean;
+    isGivenUp: boolean;
+    numCluesUsed: number;
+}
+
 export interface Letter {
     // Unique identifier for the letter instance. This allows distinguishing between multiple instances of the same letter.
     id: string;
