@@ -143,8 +143,8 @@ for await (const row of scoresLabels) {
         _contentRating,
     ] = row;
 
-    // Skip words with a game suitability score lower than 6.
-    if (Number(gameSuitability) < 6) {
+    // Skip words with a low game suitability score.
+    if (Number(gameSuitability) < 5 && wordMap.has(word)) {
         wordMap.delete(word);
     }
 }
