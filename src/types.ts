@@ -1,6 +1,5 @@
 export interface Word {
     text: string;
-    familiarityScore: number;
     definition?: string;
     clues?: string[];
 }

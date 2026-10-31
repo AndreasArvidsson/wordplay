@@ -13,7 +13,6 @@ interface GameContext {
 
 export function App(): JSX.Element {
     const [numLetters, setNumLetters] = useState(6);
-    const [includeUnfamiliarWords, setIncludeUnfamiliarWords] = useState(false);
     const [gameContext, setGameContext] = useState<GameContext>();
     const [errorMessage, setErrorMessage] = useState<string>();
 
@@ -44,12 +43,8 @@ export function App(): JSX.Element {
     const generateGameContext = async () => {
         setErrorMessage(undefined);
         const vocabulary = await readVocabulary();
-        const letters = generateLetters(
-            numLetters,
-            includeUnfamiliarWords,
-            vocabulary,
-        );
-        const words = findWords(letters, includeUnfamiliarWords, vocabulary);
+        const letters = generateLetters(numLetters, vocabulary);
+        const words = findWords(letters, vocabulary);
         const lettersWithId = letters.map((letter, index) => ({
             id: `${letter}${index}`,
             letter,
@@ -64,7 +59,7 @@ export function App(): JSX.Element {
             <table>
                 <tbody>
                     <tr>
-                        <td>Number of letters</td>
+                        <td className="pe-3">Number of letters</td>
                         <td>
                             <input
                                 type="number"
@@ -74,22 +69,6 @@ export function App(): JSX.Element {
                                 value={numLetters}
                                 onChange={(e) =>
                                     setNumLetters(Number(e.currentTarget.value))
-                                }
-                            />
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td className="pe-3">Include unfamiliar words</td>
-                        <td>
-                            <input
-                                type="checkbox"
-                                className="form-check-input"
-                                checked={includeUnfamiliarWords}
-                                onChange={(e) =>
-                                    setIncludeUnfamiliarWords(
-                                        e.currentTarget.checked,
-                                    )
                                 }
                             />
                         </td>

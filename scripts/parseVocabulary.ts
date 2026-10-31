@@ -109,6 +109,11 @@ for await (const row of vocabulary) {
         continue;
     }
 
+    // Skip words with a low familiarity score.
+    if (Number(familiarityScore) < 0.5) {
+        continue;
+    }
+
     // Skip words that contain characters other than lowercase letters.
     // This excludes proper nouns, acronyms, abbreviations and hyphenated words.
     if (!/^[a-z]+$/u.test(word)) {
@@ -117,7 +122,6 @@ for await (const row of vocabulary) {
 
     wordMap.set(word, {
         text: word,
-        familiarityScore: Number(familiarityScore),
     });
 }
 

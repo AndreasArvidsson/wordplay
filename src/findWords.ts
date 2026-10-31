@@ -1,12 +1,7 @@
 import type { Word } from "./types.js";
-import { allowWord } from "./util/allowWord.js";
 import { shuffleList } from "./util/shuffleList.js";
 
-export function findWords(
-    letters: string[],
-    includeUnfamiliar: boolean,
-    vocabulary: Word[],
-): Word[] {
+export function findWords(letters: string[], vocabulary: Word[]): Word[] {
     const letterCounts = new Map<string, number>();
 
     for (const letter of letters) {
@@ -17,10 +12,6 @@ export function findWords(
 
     const filteredWords = vocabulary.filter((word) => {
         if (word.text.length < 3 || word.text.length > letters.length) {
-            return false;
-        }
-
-        if (!allowWord(word, includeUnfamiliar)) {
             return false;
         }
 

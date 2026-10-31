@@ -1,10 +1,8 @@
 import type { Word } from "./types";
-import { allowWord } from "./util/allowWord";
 import { shuffleList } from "./util/shuffleList";
 
 export function generateLetters(
     numLetters: number,
-    includeUnfamiliar: boolean,
     vocabulary: Word[],
 ): string[] {
     if (!Number.isInteger(numLetters) || numLetters < 3) {
@@ -12,9 +10,7 @@ export function generateLetters(
     }
 
     const candidates = vocabulary.filter(
-        (word) =>
-            word.text.length === numLetters &&
-            allowWord(word, includeUnfamiliar),
+        (word) => word.text.length === numLetters,
     );
 
     if (candidates.length === 0) {
