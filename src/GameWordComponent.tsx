@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { Button } from "./components/Button";
 import type { GameWord } from "./types";
 import { classNames } from "./util/classNames";
 
@@ -24,12 +25,12 @@ export function GameWordComponent({ word, onClick }: Props): JSX.Element {
     }
 
     return (
-        <button
-            type="button"
-            className="game-word-button btn focus-ring d-flex p-0 border-0 rounded-1 text-body"
+        <Button
+            variant={null}
+            className="game-word-button focus-ring d-flex p-0 border-0 rounded-1 text-body"
             onClick={onClick}
         >
             {wordLetters}
-        </button>
+        </Button>
     );
 }

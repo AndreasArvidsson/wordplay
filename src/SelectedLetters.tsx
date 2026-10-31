@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { Button } from "./components/Button";
 import type { Letter, SubmissionState } from "./types";
 import { classNames } from "./util/classNames";
 
@@ -26,16 +27,17 @@ export function SelectedLetters({
                         flash === "fail" && "bg-danger",
                     )}
                 >
-                    <button
-                        type="button"
-                        className="btn btn-lg btn-outline-secondary btn-letter-selected"
+                    <Button
+                        variant="btn-outline-secondary"
+                        large
+                        className="btn-letter-selected"
                         disabled={disabled || letter == null}
                         onClick={
                             letter == null ? undefined : () => onClick(letter)
                         }
                     >
                         {letter?.letter}
-                    </button>
+                    </Button>
                 </span>
             ))}
         </div>

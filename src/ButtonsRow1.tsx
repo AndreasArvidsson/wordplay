@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { Button } from "./components/Button";
 
 interface Props {
     disabled: boolean;
@@ -21,38 +22,35 @@ export function ButtonsRow1({
 }: Props): JSX.Element {
     return (
         <div className="mt-4 game-buttons game-actions">
-            <button
-                type="button"
-                className="btn btn-primary"
+            <Button
+                variant="btn-primary"
                 disabled={disabled}
                 onClick={shuffleLetters}
             >
                 Shuffle
-            </button>
-            <button
-                type="button"
-                className="btn btn-primary"
+            </Button>
+            <Button
+                variant="btn-primary"
                 disabled={disabled || !hasLastSubmission}
                 onClick={useLastSubmission}
             >
                 Last
-            </button>
-            <button
-                type="button"
-                className="btn btn-primary"
+            </Button>
+            <Button
+                variant="btn-primary"
                 disabled={disabled || !hasSelectedLetters}
                 onClick={resetSelectedLetters}
             >
                 Clear
-            </button>
-            <button
-                type="button"
-                className="btn btn-success ms-auto"
+            </Button>
+            <Button
+                variant="btn-success"
+                className="ms-auto"
                 disabled={disabled || !hasSelectedLetters}
                 onClick={submitSelectedLetters}
             >
                 Enter
-            </button>
+            </Button>
         </div>
     );
 }

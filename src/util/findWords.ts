@@ -1,5 +1,5 @@
-import type { Word } from "./types.js";
-import { shuffleList } from "./util/shuffleList.js";
+import type { Word } from "../types.js";
+import { shuffleList } from "./shuffleList.js";
 
 export function findWords(letters: string[], vocabulary: Word[]): Word[] {
     const letterCounts = new Map<string, number>();

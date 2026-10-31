@@ -1,9 +1,10 @@
 import type { JSX } from "preact";
 import { useEffect, useState } from "preact/hooks";
-import { findWords } from "./findWords";
+import { Button } from "./components/Button";
 import { Game } from "./Game.js";
-import { generateLetters } from "./generateLetters";
 import type { Letter, Word } from "./types";
+import { findWords } from "./util/findWords";
+import { generateLetters } from "./util/generateLetters";
 import { readVocabulary } from "./util/readVocabulary";
 
 interface GameContext {
@@ -77,9 +78,9 @@ export function App(): JSX.Element {
                     <tr>
                         <td />
                         <td>
-                            <button
-                                type="button"
-                                className="btn btn-primary mt-3"
+                            <Button
+                                variant="btn-primary"
+                                className="mt-3"
                                 onClick={() => {
                                     generateGameContext().catch(
                                         (error: unknown) => {
@@ -93,7 +94,7 @@ export function App(): JSX.Element {
                                 }}
                             >
                                 Start
-                            </button>
+                            </Button>
                         </td>
                     </tr>
                 </tbody>

@@ -1,5 +1,5 @@
-import type { Word } from "./types";
-import { shuffleList } from "./util/shuffleList";
+import type { Word } from "../types";
+import { shuffleList } from "./shuffleList";
 
 export function generateLetters(
     numLetters: number,

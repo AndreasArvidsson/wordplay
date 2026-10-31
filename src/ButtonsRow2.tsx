@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { Button } from "./components/Button";
 
 interface Props {
     isDone: boolean;
@@ -18,36 +19,27 @@ export function ButtonsRow2({
     if (isDone) {
         return (
             <div className="mt-5 game-buttons">
-                <button
-                    type="button"
-                    className="btn btn-success"
-                    onClick={exitGame}
-                >
+                <Button variant="btn-success" onClick={exitGame}>
                     Exit
-                </button>
+                </Button>
             </div>
         );
     }
 
     return (
         <div className="mt-5 game-buttons game-actions">
-            <button
-                type="button"
-                className="btn btn-danger"
-                disabled={disabled}
-                onClick={giveUp}
-            >
+            <Button variant="btn-danger" disabled={disabled} onClick={giveUp}>
                 Give up
-            </button>
+            </Button>
 
-            <button
-                type="button"
-                className="btn btn-secondary ms-auto"
+            <Button
+                variant="btn-secondary"
+                className="ms-auto"
                 disabled={disabled}
                 onClick={useClue}
             >
                 Clue
-            </button>
+            </Button>
         </div>
     );
 }

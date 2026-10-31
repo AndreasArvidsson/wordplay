@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { Button } from "./components/Button";
 import type { Letter } from "./types";
 
 interface Props {
@@ -19,15 +20,16 @@ export function AvailableLetters({
             {letters.map((letter) => {
                 const isSelected = selectedLettersIds.has(letter.id);
                 return (
-                    <button
+                    <Button
                         key={letter.id}
-                        type="button"
-                        className="btn btn-lg btn-outline-secondary btn-letter-available"
+                        variant="btn-outline-secondary"
+                        large
+                        className="btn-letter-available"
                         disabled={disabled || isSelected}
                         onClick={() => onClick(letter)}
                     >
                         {!isSelected && letter.letter}
-                    </button>
+                    </Button>
                 );
             })}
         </div>

@@ -26,7 +26,9 @@ The maximum score shown is the total possible score without using clues.
 
 ## Todo
 
+- Letters in url soo you can replay or share?
 - Limit number of words? Both low and high limit?
-- Rounds
+- Rounds with advance to next functionality.
 - Local storage of settings and scores
 - timed
+- Add pronunciation to definition. This is missing from Linguabase so we would need a additional source.
