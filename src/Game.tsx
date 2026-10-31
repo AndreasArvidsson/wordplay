@@ -1,9 +1,15 @@
 import type { JSX } from "preact";
 import { useLayoutEffect, useState } from "preact/hooks";
+import { AvailableLetters } from "./AvailableLetters";
+import { ButtonsRow1 } from "./ButtonsRow1";
+import { ButtonsRow2 } from "./ButtonsRow2";
 import { Clues } from "./Clues";
-import { GameWordComponent } from "./GameWordComponent";
+import { GameScores } from "./GameScores";
+import { GameWords } from "./GameWords";
+import { SelectedLetters } from "./SelectedLetters";
 import type { GameWord, Letter, Word } from "./types";
 import { shuffleList } from "./util/shuffleList";
+import { WordDefinition } from "./WordDefinition";
 
 interface Props {
     letters: Letter[];
@@ -26,6 +32,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             numCluesUsed: 0,
         })),
     );
+
     const isDone = gameWords.every((sw) => sw.isSolved || sw.isGivenUp);
     const numSelectedLetters = selectedLetters.filter((s) => s != null).length;
     const longestWordLength = words.reduce(
@@ -35,8 +42,8 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
 
     const selectLetter = (letter: Letter) => {
         const copy = selectedLetters.slice();
-        const nextAvailableIndex = selectedLetters.findIndex((i) => i == null);
-        copy[nextAvailableIndex] = letter;
+        const index = selectedLetters.findIndex((i) => i == null);
+        copy[index] = letter;
         setSelectedLetters(copy);
     };
 
@@ -58,8 +65,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     };
 
     const shuffleLetters = () => {
-        const copy = shuffleList(letters);
-        setShuffledLetters(copy);
+        setShuffledLetters(shuffleList(letters));
     };
 
     const submitSelectedLetters = () => {
@@ -69,7 +75,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             .toLowerCase();
         const foundWord = gameWords.find((sw) => sw.word.text === word);
 
-        if (foundWord) {
+        if (foundWord != null) {
             foundWord.isSolved = true;
             setGameWords(gameWords.slice());
         }
@@ -183,194 +189,6 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
         return () => globalThis.removeEventListener("keydown", handleKeyDown);
     });
 
-    const renderScore = () => {
-        const { score, maxScore, numSolved } = getScores(gameWords);
-        return (
-            <div className="mb-3">
-                <div
-                    className="d-flex flex-wrap justify-content-center gap-2 column-gap-4 mb-1"
-                    role="status"
-                >
-                    <span title="Each word earns its letter count squared in points (3 letters = 9 points).">
-                        Score: <strong>{score}</strong> / {maxScore}
-                    </span>
-                    <span>
-                        Words solved: <strong>{numSolved}</strong> /{" "}
-                        {gameWords.length}
-                    </span>
-                </div>
-            </div>
-        );
-    };
-
-    const renderWords = () => {
-        return (
-            <div className="game-words">
-                {gameWords.map((word) => (
-                    <div key={word.word.text} className="game-word">
-                        <GameWordComponent
-                            word={word}
-                            onClick={() => setDefinitionWord(word.word)}
-                        />
-                    </div>
-                ))}
-            </div>
-        );
-    };
-
-    const renderDefinition = () => {
-        if (definitionWord == null) {
-            return null;
-        }
-
-        return (
-            <section
-                id="game-definition"
-                className="game-definition mw-100 mx-auto mb-3 p-3 text-start border border-secondary rounded text-break"
-            >
-                <div className="d-flex align-items-center justify-content-between gap-2">
-                    <h2 id="game-definition-word" className="h6 mb-0">
-                        {definitionWord.text.toUpperCase()}
-                    </h2>
-                    <button
-                        type="button"
-                        className="btn-close flex-shrink-0 p-2"
-                        aria-label="Close definition"
-                        onClick={closeDefinition}
-                    />
-                </div>
-                <div
-                    className="mt-2"
-                    // oxlint-disable-next-line react/no-danger
-                    dangerouslySetInnerHTML={{
-                        __html: definitionWord.definition ?? "",
-                    }}
-                />
-            </section>
-        );
-    };
-
-    const renderSelected = () => {
-        return (
-            <div className="letter-row">
-                {selectedLetters.map((letter, index) => (
-                    <span key={index} className="selected-letter-wrapper">
-                        <button
-                            type="button"
-                            className="btn btn-lg btn-outline-secondary btn-letter-selected"
-                            disabled={isDone || letter == null}
-                            onClick={
-                                letter == null
-                                    ? undefined
-                                    : () => deselectLetter(letter)
-                            }
-                        >
-                            {letter?.letter}
-                        </button>
-                    </span>
-                ))}
-            </div>
-        );
-    };
-
-    const renderAvailable = () => {
-        return (
-            <div className="mt-3 letter-row">
-                {shuffledLetters.map((letter) => {
-                    const isSelected = selectedLetters.some(
-                        (s) => s?.id === letter.id,
-                    );
-                    return (
-                        <button
-                            key={letter.id}
-                            type="button"
-                            className="btn btn-lg btn-outline-secondary btn-letter-available"
-                            disabled={isDone || isSelected}
-                            onClick={() => selectLetter(letter)}
-                        >
-                            {!isSelected && letter.letter}
-                        </button>
-                    );
-                })}
-            </div>
-        );
-    };
-
-    const renderButtons = () => {
-        return (
-            <div className="mt-4 game-buttons game-actions">
-                <button
-                    type="button"
-                    className="btn btn-primary"
-                    disabled={isDone}
-                    onClick={shuffleLetters}
-                >
-                    Shuffle
-                </button>
-                <button
-                    type="button"
-                    className="btn btn-primary"
-                    disabled={isDone || lastSubmission == null}
-                    onClick={useLastSubmission}
-                >
-                    Last
-                </button>
-                <button
-                    type="button"
-                    className="btn btn-primary"
-                    disabled={isDone}
-                    onClick={resetSelectedLetters}
-                >
-                    Clear
-                </button>
-                <button
-                    type="button"
-                    className="btn btn-success ms-auto"
-                    disabled={isDone || numSelectedLetters < 3}
-                    onClick={submitSelectedLetters}
-                >
-                    Enter
-                </button>
-            </div>
-        );
-    };
-
-    const renderGiveUpButton = () => {
-        if (isDone) {
-            return (
-                <div className="mt-5 game-buttons">
-                    <button
-                        type="button"
-                        className="btn btn-success"
-                        onClick={exitGame}
-                    >
-                        Exit
-                    </button>
-                </div>
-            );
-        }
-
-        return (
-            <div className="mt-5 game-buttons game-actions">
-                <button
-                    type="button"
-                    className="btn btn-danger"
-                    onClick={giveUp}
-                >
-                    Give up
-                </button>
-                <button
-                    type="button"
-                    className="btn btn-secondary ms-auto"
-                    disabled={isDone}
-                    onClick={useClue}
-                >
-                    Clue
-                </button>
-            </div>
-        );
-    };
-
     return (
         <div
             className="text-center"
@@ -383,43 +201,52 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
                 ),
             }}
         >
-            {renderScore()}
-            {renderWords()}
-            {renderDefinition()}
-            {renderSelected()}
-            {renderAvailable()}
-            {renderButtons()}
+            <GameScores words={gameWords} />
+
+            <GameWords words={gameWords} defineWord={setDefinitionWord} />
+
+            {definitionWord && (
+                <WordDefinition
+                    word={definitionWord}
+                    onClose={closeDefinition}
+                />
+            )}
+
+            <SelectedLetters
+                letters={selectedLetters}
+                disabled={isDone}
+                onClick={deselectLetter}
+            />
+
+            <AvailableLetters
+                disabled={isDone}
+                letters={letters}
+                selectedLettersIds={
+                    new Set(selectedLetters.map((l) => l?.id ?? ""))
+                }
+                onClick={selectLetter}
+            />
+
+            <ButtonsRow1
+                disabled={isDone}
+                hasLastSubmission={lastSubmission != null}
+                numSelectedLetters={numSelectedLetters}
+                shuffleLetters={shuffleLetters}
+                useLastSubmission={useLastSubmission}
+                resetSelectedLetters={resetSelectedLetters}
+                submitSelectedLetters={submitSelectedLetters}
+            />
+
             <Clues words={gameWords} />
-            {renderGiveUpButton()}
+
+            <ButtonsRow2
+                isDone={isDone}
+                exitGame={exitGame}
+                giveUp={giveUp}
+                useClue={useClue}
+            />
         </div>
     );
-}
-
-function getScores(solvedWords: GameWord[]): {
-    score: number;
-    maxScore: number;
-    numSolved: number;
-} {
-    let score = 0;
-    let maxScore = 0;
-    let numSolved = 0;
-
-    for (const sw of solvedWords) {
-        const wordScore = getWordScore(sw.word);
-        maxScore += wordScore;
-
-        if (sw.isSolved) {
-            numSolved++;
-            const multiplier = Math.max(0.25, 1 - sw.numCluesUsed * 0.15);
-            score += Math.round(wordScore * multiplier);
-        }
-    }
-
-    return { score, maxScore, numSolved };
-}
-
-function getWordScore(word: Word): number {
-    return word.text.length ** 2;
 }
 
 function getDefaultSelected(length: number): (Letter | null)[] {

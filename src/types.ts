@@ -10,6 +10,7 @@ export interface GameWord {
     isSolved: boolean;
     isGivenUp: boolean;
     numCluesUsed: number;
+    clues: string[];
 }
 
 export interface Letter {
