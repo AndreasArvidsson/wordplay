@@ -1,4 +1,5 @@
 import { allowWord } from "./allowWord.js";
+import { shuffleList } from "./shuffleList.js";
 import type { Word } from "./types.js";
 
 export function findWords(
@@ -39,9 +40,8 @@ export function findWords(
         return true;
     });
 
-    filteredWords.sort(
-        (a, b) => a.text.length - b.text.length || a.text.localeCompare(b.text),
+    // Sorted by length, but shuffled within each length group
+    return shuffleList(filteredWords).toSorted(
+        (a, b) => a.text.length - b.text.length,
     );
-
-    return filteredWords;
 }

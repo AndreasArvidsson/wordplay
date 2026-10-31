@@ -26,6 +26,7 @@ The maximum score shown is the total possible score without using clues.
 
 ## Todo
 
+- Limit number of words? Both low and high limit?
 - Rounds
 - Local storage of settings and scores
 - timed
