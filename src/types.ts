@@ -18,3 +18,5 @@ export interface Letter {
     id: string;
     letter: string;
 }
+
+export type SubmissionState = "success" | "fail";

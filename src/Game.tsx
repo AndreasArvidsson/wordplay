@@ -7,7 +7,7 @@ import { Clues } from "./Clues";
 import { GameScores } from "./GameScores";
 import { GameWords } from "./GameWords";
 import { SelectedLetters } from "./SelectedLetters";
-import type { GameWord, Letter, Word } from "./types";
+import type { GameWord, Letter, SubmissionState, Word } from "./types";
 import { createGameWord } from "./util/createGameWord";
 import { shuffleList } from "./util/shuffleList";
 import { WordDefinition } from "./WordDefinition";
@@ -28,9 +28,11 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     const [gameWords, setGameWords] = useState<GameWord[]>(
         words.map((word) => createGameWord(word)),
     );
+    const [submissionState, setSubmissionState] = useState<SubmissionState>();
 
     const isDone = gameWords.every((sw) => sw.isSolved || sw.isGivenUp);
-    const numSelectedLetters = selectedLetters.filter((s) => s != null).length;
+    const disabledButtons = isDone || submissionState != null;
+    const hasSelectedLetters = selectedLetters.some((s) => s != null);
     const longestWordLength = words.reduce(
         (length, { text: word }) => Math.max(length, word.length),
         1,
@@ -71,13 +73,18 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             .toLowerCase();
         const foundWord = gameWords.find((sw) => sw.word.text === word);
 
-        if (foundWord != null) {
-            foundWord.isSolved = true;
-            setGameWords(gameWords.slice());
-        }
+        setSubmissionState(foundWord == null ? "fail" : "success");
 
-        setLastSubmission(selectedLetters);
-        resetSelectedLetters();
+        setTimeout(() => {
+            if (foundWord != null) {
+                foundWord.isSolved = true;
+                setGameWords(gameWords.slice());
+            }
+
+            setSubmissionState(undefined);
+            setLastSubmission(selectedLetters);
+            resetSelectedLetters();
+        }, 500);
     };
 
     const useClue = () => {
@@ -107,7 +114,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     useLayoutEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (
-                isDone ||
+                disabledButtons ||
                 event.defaultPrevented ||
                 event.ctrlKey ||
                 event.metaKey ||
@@ -132,7 +139,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
                         return;
                     }
                     event.preventDefault();
-                    if (numSelectedLetters >= 3) {
+                    if (hasSelectedLetters) {
                         submitSelectedLetters();
                     }
                     break;
@@ -195,12 +202,13 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
 
             <SelectedLetters
                 letters={selectedLetters}
-                disabled={isDone}
+                disabled={disabledButtons}
+                flash={submissionState}
                 onClick={deselectLetter}
             />
 
             <AvailableLetters
-                disabled={isDone}
+                disabled={disabledButtons}
                 letters={letters}
                 selectedLettersIds={
                     new Set(selectedLetters.map((l) => l?.id ?? ""))
@@ -209,9 +217,9 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             />
 
             <ButtonsRow1
-                disabled={isDone}
+                disabled={disabledButtons}
                 hasLastSubmission={lastSubmission != null}
-                numSelectedLetters={numSelectedLetters}
+                hasSelectedLetters={hasSelectedLetters}
                 shuffleLetters={shuffleLetters}
                 useLastSubmission={useLastSubmission}
                 resetSelectedLetters={resetSelectedLetters}
@@ -222,6 +230,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
 
             <ButtonsRow2
                 isDone={isDone}
+                disabled={disabledButtons}
                 exitGame={exitGame}
                 giveUp={giveUp}
                 useClue={useClue}
