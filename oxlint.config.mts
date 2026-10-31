@@ -138,6 +138,7 @@ export default defineConfig({
                 varsIgnorePattern: "^_",
             },
         ],
+        "import/no-unassigned-import": ["warn", { allow: ["**/*.css"] }],
         "no-restricted-imports": [
             "error",
             {

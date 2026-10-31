@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
 import type { GameWord } from "./types";
+import "./Clues.css";
 
 interface Props {
     words: GameWord[];

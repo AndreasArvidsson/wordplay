@@ -1,6 +1,7 @@
 import type { JSX } from "preact";
 import { Button } from "./components/Button";
 import type { Letter } from "./types";
+import "./letter.css";
 
 interface Props {
     disabled: boolean;

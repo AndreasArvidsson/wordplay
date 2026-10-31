@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
 import { Button } from "./components/Button";
+import "./ButtonsRow.css";
 
 interface Props {
     disabled: boolean;
@@ -21,7 +22,7 @@ export function ButtonsRow1({
     submitSelectedLetters,
 }: Props): JSX.Element {
     return (
-        <div className="mt-4 game-buttons game-actions">
+        <div className="mt-4 buttons-row">
             <Button
                 variant="btn-primary"
                 disabled={disabled}

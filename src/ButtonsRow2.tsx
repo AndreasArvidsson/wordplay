@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
 import { Button } from "./components/Button";
+import "./ButtonsRow.css";
 
 interface Props {
     isDone: boolean;
@@ -18,7 +19,7 @@ export function ButtonsRow2({
 }: Props): JSX.Element {
     if (isDone) {
         return (
-            <div className="mt-5 game-buttons">
+            <div className="mt-5 buttons-row">
                 <Button variant="btn-success" onClick={exitGame}>
                     Exit
                 </Button>
@@ -27,7 +28,7 @@ export function ButtonsRow2({
     }
 
     return (
-        <div className="mt-5 game-buttons game-actions">
+        <div className="mt-5 buttons-row">
             <Button variant="btn-danger" disabled={disabled} onClick={giveUp}>
                 Give up
             </Button>

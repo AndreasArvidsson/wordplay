@@ -1,149 +1,20 @@
+@media (min-width: 768px) {
+    .container-xs {
+        max-width: 720px;
+    }
+}
+
 html,
 body {
     height: 100%;
     overflow: hidden;
     overscroll-behavior-y: none;
+    background-color: grey;
 }
 
 #root {
     height: 100%;
-    height: 100dvh;
     overflow-y: auto;
     overscroll-behavior-y: contain;
-}
-
-.letter-row {
-    display: grid;
-    grid-template-columns: repeat(var(--letter-count), minmax(0, 1fr));
-    align-items: start;
-    width: calc(var(--letter-count) * 4rem);
-    max-width: 100%;
-    margin-inline: auto;
-}
-
-.btn-letter-selected,
-.btn-letter-available {
-    width: 75%;
-    aspect-ratio: 1;
-    padding: 0;
-    font-size: min(1.25rem, calc((100vw - 1.5rem) / var(--letter-count) * 0.4));
-    color: #6c757d;
     background-color: white;
-    border: 1px solid #6c757d;
-    border-radius: 1.5rem;
-}
-
-.btn-letter-selected {
-    --bs-btn-disabled-bg: white;
-    --bs-btn-disabled-opacity: 1;
-}
-
-.btn-letter-available {
-    justify-self: center;
-}
-
-.selected-letter-wrapper {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    min-width: 0;
-    aspect-ratio: 1;
-    background-color: darkgray;
-    vertical-align: top;
-    border-top: 1px solid #6c757d;
-    border-bottom: 1px solid #6c757d;
-}
-
-.selected-letter-wrapper:first-child {
-    border-top-left-radius: 0.375rem;
-    border-bottom-left-radius: 0.375rem;
-    border-left: 1px solid #6c757d;
-}
-
-.selected-letter-wrapper:last-child {
-    border-top-right-radius: 0.375rem;
-    border-bottom-right-radius: 0.375rem;
-    border-right: 1px solid #6c757d;
-}
-
-.game-words,
-.game-definition {
-    width: max(
-        24rem,
-        calc(
-            var(--word-columns) * var(--word-width) +
-                (var(--word-columns) - 1) * 0.75rem + 0.625rem
-        )
-    );
-}
-
-.game-words {
-    columns: var(--word-width) var(--word-columns);
-    column-gap: 0.75rem;
-    max-width: 100%;
-    margin-inline: auto;
-    text-align: left;
-    border: 1px solid #6c757d;
-    border-radius: 0.375rem;
-    margin-bottom: 1rem;
-    padding: 0.25rem;
-    background-color: grey;
-}
-
-.game-word {
-    display: flex;
-    min-width: 0;
-    break-inside: avoid;
-    margin-bottom: 0.125rem;
-}
-
-.word-letter {
-    display: inline-block;
-    flex-shrink: 1;
-    width: 1.25rem;
-    min-width: 0;
-    height: 1.5rem;
-    padding: 0 0.1rem;
-    text-align: center;
-    background-color: white;
-    border: 1px solid #6c757d;
-    border-radius: 0.25rem;
-    margin-right: 0.1rem;
-    vertical-align: top;
-}
-
-.word-letter.given-up {
-    background-color: lightskyblue;
-}
-
-.game-buttons {
-    width: 24rem;
-    max-width: 100%;
-    margin-inline: auto;
-    text-align: left;
-}
-
-.game-clues {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 24rem;
-    max-width: 100%;
-    margin-inline: auto;
-    text-align: left;
-}
-
-.game-actions {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.game-actions .btn {
-    padding-inline: clamp(0.25rem, 2vw, 0.75rem);
-    white-space: nowrap;
-}
-
-.game-word-button {
-    min-width: 0;
 }

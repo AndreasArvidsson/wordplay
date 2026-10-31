@@ -2,6 +2,7 @@ import type { JSX } from "preact";
 import { Button } from "./components/Button";
 import type { Letter, SubmissionState } from "./types";
 import { classNames } from "./util/classNames";
+import "./letter.css";
 
 interface Props {
     disabled: boolean;
@@ -22,7 +23,7 @@ export function SelectedLetters({
                 <span
                     key={index}
                     className={classNames(
-                        "selected-letter-wrapper",
+                        "letter-selected-wrapper",
                         flash === "success" && "bg-success",
                         flash === "fail" && "bg-danger",
                     )}
