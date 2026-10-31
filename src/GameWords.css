@@ -1,4 +1,0 @@
-.game-words {
-    columns: var(--word-width) var(--word-columns);
-    column-gap: 0.75rem;
-}

@@ -31,12 +31,8 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     const [submissionState, setSubmissionState] = useState<SubmissionState>();
 
     const isDone = gameWords.every((sw) => sw.isSolved || sw.isGivenUp);
-    const disabledButtons = isDone || submissionState != null;
+    const disableButtons = isDone || submissionState != null;
     const hasSelectedLetters = selectedLetters.some((s) => s != null);
-    const longestWordLength = words.reduce(
-        (length, { text: word }) => Math.max(length, word.length),
-        1,
-    );
 
     const selectLetter = (letter: Letter) => {
         const copy = selectedLetters.slice();
@@ -114,7 +110,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     useLayoutEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (
-                disabledButtons ||
+                disableButtons ||
                 event.defaultPrevented ||
                 event.ctrlKey ||
                 event.metaKey ||
@@ -176,16 +172,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     });
 
     return (
-        <div
-            className="text-center"
-            style={{
-                "--word-width": `${longestWordLength * 1.35}rem`,
-                "--word-columns": Math.max(
-                    1,
-                    Math.min(5, Math.floor(gameWords.length / 3)),
-                ),
-            }}
-        >
+        <div className="text-center">
             <GameScores words={gameWords} />
 
             <GameWords words={gameWords} defineWord={setDefinitionWord} />
@@ -201,13 +188,13 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
 
             <LettersSelected
                 letters={selectedLetters}
-                disabled={disabledButtons}
+                disabled={disableButtons}
                 flash={submissionState}
                 onClick={deselectLetter}
             />
 
             <LettersAvailable
-                disabled={disabledButtons}
+                disabled={disableButtons}
                 letters={letters}
                 selectedLettersIds={
                     new Set(selectedLetters.map((l) => l?.id ?? ""))
@@ -216,7 +203,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             />
 
             <ButtonsRow1
-                disabled={disabledButtons}
+                disabled={disableButtons}
                 hasLastSubmission={lastSubmission != null}
                 hasSelectedLetters={hasSelectedLetters}
                 shuffleLetters={shuffleLetters}
@@ -227,7 +214,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
 
             <ButtonsRow2
                 isDone={isDone}
-                disabled={disabledButtons}
+                disabled={disableButtons}
                 exitGame={exitGame}
                 giveUp={giveUp}
                 useClue={useClue}
