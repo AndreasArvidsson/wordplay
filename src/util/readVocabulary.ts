@@ -1,5 +1,5 @@
-import vocabularyUrl from "../assets/vocabulary.json?url";
-import type { Word } from "./types";
+import vocabularyUrl from "../../assets/vocabulary.json?url";
+import type { Word } from "../types";
 
 let vocabularyPromise: Promise<Word[]> | undefined;
 

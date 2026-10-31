@@ -1,6 +1,6 @@
-import { allowWord } from "./allowWord";
-import { shuffleList } from "./shuffleList";
 import type { Word } from "./types";
+import { allowWord } from "./util/allowWord";
+import { shuffleList } from "./util/shuffleList";
 
 export function generateLetters(
     numLetters: number,

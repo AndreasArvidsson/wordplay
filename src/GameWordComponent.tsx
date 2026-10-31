@@ -1,6 +1,6 @@
 import type { JSX } from "preact";
-import { classNames } from "./classNames";
 import type { GameWord } from "./types";
+import { classNames } from "./util/classNames";
 
 interface Props {
     word: GameWord;

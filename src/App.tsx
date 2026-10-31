@@ -3,8 +3,8 @@ import { useEffect, useState } from "preact/hooks";
 import { findWords } from "./findWords";
 import { Game } from "./Game.js";
 import { generateLetters } from "./generateLetters";
-import { readVocabulary } from "./readVocabulary";
 import type { Letter, Word } from "./types";
+import { readVocabulary } from "./util/readVocabulary";
 
 interface GameContext {
     letters: Letter[];

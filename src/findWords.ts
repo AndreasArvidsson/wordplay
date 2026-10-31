@@ -1,6 +1,6 @@
-import { allowWord } from "./allowWord.js";
-import { shuffleList } from "./shuffleList.js";
 import type { Word } from "./types.js";
+import { allowWord } from "./util/allowWord.js";
+import { shuffleList } from "./util/shuffleList.js";
 
 export function findWords(
     letters: string[],

@@ -1,8 +1,9 @@
 import type { JSX } from "preact";
 import { useLayoutEffect, useState } from "preact/hooks";
+import { Clues } from "./Clues";
 import { GameWordComponent } from "./GameWordComponent";
-import { shuffleList } from "./shuffleList";
 import type { GameWord, Letter, Word } from "./types";
+import { shuffleList } from "./util/shuffleList";
 
 interface Props {
     letters: Letter[];
@@ -17,7 +18,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     );
     const [lastSubmission, setLastSubmission] = useState<(Letter | null)[]>();
     const [definitionWord, setDefinitionWord] = useState<Word>();
-    const [solvedWords, setSolvedWords] = useState<GameWord[]>(
+    const [gameWords, setGameWords] = useState<GameWord[]>(
         words.map((word) => ({
             word,
             isSolved: false,
@@ -25,7 +26,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             numCluesUsed: 0,
         })),
     );
-    const isDone = solvedWords.every((sw) => sw.isSolved || sw.isGivenUp);
+    const isDone = gameWords.every((sw) => sw.isSolved || sw.isGivenUp);
     const numSelectedLetters = selectedLetters.filter((s) => s != null).length;
     const longestWordLength = words.reduce(
         (length, { text: word }) => Math.max(length, word.length),
@@ -66,11 +67,11 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             .map((s) => s?.letter ?? "")
             .join("")
             .toLowerCase();
-        const foundWord = solvedWords.find((sw) => sw.word.text === word);
+        const foundWord = gameWords.find((sw) => sw.word.text === word);
 
         if (foundWord) {
             foundWord.isSolved = true;
-            setSolvedWords(solvedWords.slice());
+            setGameWords(gameWords.slice());
         }
 
         setLastSubmission(selectedLetters);
@@ -79,7 +80,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
 
     const useClue = () => {
         // First, try to use a clue for a word that already has clues in progress.
-        const cluesInProgress = solvedWords.find(
+        const cluesInProgress = gameWords.find(
             (sw) =>
                 !sw.isSolved &&
                 sw.numCluesUsed > 0 &&
@@ -88,24 +89,24 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
 
         if (cluesInProgress != null) {
             cluesInProgress.numCluesUsed++;
-            setSolvedWords(solvedWords.slice());
+            setGameWords(gameWords.slice());
             return;
         }
 
         // If no clues are in progress, pick a random unsolved word with no clues used yet.
-        const unsolvedWords = solvedWords.filter(
+        const unsolvedWords = gameWords.filter(
             (sw) => !sw.isSolved && sw.numCluesUsed === 0,
         );
 
         if (unsolvedWords.length > 0) {
             unsolvedWords[0].numCluesUsed++;
-            setSolvedWords(solvedWords.slice());
+            setGameWords(gameWords.slice());
         }
     };
 
     const giveUp = () => {
-        setSolvedWords(
-            solvedWords.map((sw) =>
+        setGameWords(
+            gameWords.map((sw) =>
                 sw.isSolved ? sw : { ...sw, isGivenUp: !sw.isSolved },
             ),
         );
@@ -183,7 +184,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     });
 
     const renderScore = () => {
-        const { score, maxScore, numSolved } = getScores(solvedWords);
+        const { score, maxScore, numSolved } = getScores(gameWords);
         return (
             <div className="mb-3">
                 <div
@@ -195,7 +196,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
                     </span>
                     <span>
                         Words solved: <strong>{numSolved}</strong> /{" "}
-                        {solvedWords.length}
+                        {gameWords.length}
                     </span>
                 </div>
             </div>
@@ -205,7 +206,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
     const renderWords = () => {
         return (
             <div className="game-words">
-                {solvedWords.map((word) => (
+                {gameWords.map((word) => (
                     <div key={word.word.text} className="game-word">
                         <GameWordComponent
                             word={word}
@@ -334,34 +335,6 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
         );
     };
 
-    const renderClues = () => {
-        return (
-            <div className="game-clues mt-2">
-                {solvedWords.map((word) => {
-                    const clues =
-                        word.numCluesUsed > 0 &&
-                        !word.isSolved &&
-                        !word.isGivenUp
-                            ? word.word.clues?.slice(0, word.numCluesUsed)
-                            : undefined;
-                    if (clues == null) {
-                        return null;
-                    }
-                    return (
-                        <div key={word.word.text}>
-                            {word.word.text.length} letters:
-                            <ul>
-                                {clues.map((clue, index) => (
-                                    <li key={index}>{clue}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    );
-                })}
-            </div>
-        );
-    };
-
     const renderGiveUpButton = () => {
         if (isDone) {
             return (
@@ -406,7 +379,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
                 "--word-width": `${longestWordLength * 1.35}rem`,
                 "--word-columns": Math.max(
                     1,
-                    Math.min(5, Math.floor(words.length / 3)),
+                    Math.min(5, Math.floor(gameWords.length / 3)),
                 ),
             }}
         >
@@ -416,7 +389,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             {renderSelected()}
             {renderAvailable()}
             {renderButtons()}
-            {renderClues()}
+            <Clues words={gameWords} />
             {renderGiveUpButton()}
         </div>
     );
