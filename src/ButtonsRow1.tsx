@@ -1,6 +1,5 @@
 import type { JSX } from "preact";
 import { Button } from "./components/Button";
-import "./ButtonsRow.css";
 
 interface Props {
     disabled: boolean;
@@ -22,7 +21,7 @@ export function ButtonsRow1({
     submitSelectedLetters,
 }: Props): JSX.Element {
     return (
-        <div className="mt-4 buttons-row">
+        <div className="d-flex gap-3 mt-4">
             <Button
                 variant="btn-primary"
                 disabled={disabled}
@@ -30,6 +29,7 @@ export function ButtonsRow1({
             >
                 Shuffle
             </Button>
+
             <Button
                 variant="btn-primary"
                 disabled={disabled || !hasLastSubmission}
@@ -37,6 +37,7 @@ export function ButtonsRow1({
             >
                 Last
             </Button>
+
             <Button
                 variant="btn-primary"
                 disabled={disabled || !hasSelectedLetters}
@@ -44,6 +45,7 @@ export function ButtonsRow1({
             >
                 Clear
             </Button>
+
             <Button
                 variant="btn-success"
                 className="ms-auto"
