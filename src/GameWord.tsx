@@ -16,7 +16,7 @@ export function GameWordComponent({ word, onClick }: Props): JSX.Element {
         <span
             key={index}
             className={classNames(
-                "game-word-letter",
+                "game-word-letter border border-secondary rounded-1",
                 word.isGivenUp && "given-up",
             )}
         >
@@ -24,19 +24,14 @@ export function GameWordComponent({ word, onClick }: Props): JSX.Element {
         </span>
     ));
 
-    if (!showText || word.word.definition == null) {
-        return <div className="game-word">{wordLetters}</div>;
-    }
-
     return (
-        <div className="game-word">
-            <Button
-                variant={null}
-                className="game-word-button focus-ring d-flex p-0 border-0 rounded-1 text-body"
-                onClick={onClick}
-            >
-                {wordLetters}
-            </Button>
-        </div>
+        <Button
+            variant={null}
+            className="game-word d-flex p-0 border-0"
+            disabled={!showText || word.word.definition == null}
+            onClick={showText ? onClick : undefined}
+        >
+            {wordLetters}
+        </Button>
     );
 }

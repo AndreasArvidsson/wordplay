@@ -16,5 +16,5 @@ body {
     height: 100%;
     overflow-y: auto;
     overscroll-behavior-y: contain;
-    background-color: white;
+    background-color: var(--bs-body-bg);
 }

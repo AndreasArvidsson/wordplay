@@ -1,12 +1,12 @@
 import type { JSX } from "preact";
 import { useLayoutEffect, useState } from "preact/hooks";
-import { AvailableLetters } from "./AvailableLetters";
 import { ButtonsRow1 } from "./ButtonsRow1";
 import { ButtonsRow2 } from "./ButtonsRow2";
 import { Clues } from "./Clues";
 import { GameScores } from "./GameScores";
 import { GameWords } from "./GameWords";
-import { SelectedLetters } from "./SelectedLetters";
+import { LettersAvailable } from "./LettersAvailable";
+import { LettersSelected } from "./LettersSelected";
 import type { GameWord, Letter, SubmissionState, Word } from "./types";
 import { createGameWord } from "./util/createGameWord";
 import { shuffleList } from "./util/shuffleList";
@@ -132,9 +132,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
                 case "Enter":
                     if (
                         event.target instanceof Element &&
-                        event.target.closest(
-                            ".game-word-button, .btn-close, a[href]",
-                        ) != null
+                        event.target.closest("button, a[href]") != null
                     ) {
                         return;
                     }
@@ -181,7 +179,6 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
         <div
             className="text-center"
             style={{
-                "--letter-count": letters.length,
                 "--word-width": `${longestWordLength * 1.35}rem`,
                 "--word-columns": Math.max(
                     1,
@@ -202,14 +199,14 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
 
             <Clues words={gameWords} />
 
-            <SelectedLetters
+            <LettersSelected
                 letters={selectedLetters}
                 disabled={disabledButtons}
                 flash={submissionState}
                 onClick={deselectLetter}
             />
 
-            <AvailableLetters
+            <LettersAvailable
                 disabled={disabledButtons}
                 letters={letters}
                 selectedLettersIds={

@@ -10,7 +10,7 @@ interface Props {
 
 export function GameWords({ words, defineWord }: Props): JSX.Element {
     return (
-        <div className="game-words">
+        <div className="game-words mb-3 p-2 bg-secondary border border-secondary rounded">
             {words.map((word) => (
                 <GameWordComponent
                     key={word.word.text}

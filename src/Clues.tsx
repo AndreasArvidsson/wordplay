@@ -21,7 +21,7 @@ export function Clues({ words }: Props): JSX.Element | null {
     }
 
     return (
-        <section className="mb-3 p-3 text-start border border-secondary rounded">
+        <section className="mb-3 p-2 text-start border border-secondary rounded">
             {wordsWithClues.map(({ word, clues }) => {
                 return (
                     <div key={word.word.text}>

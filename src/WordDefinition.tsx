@@ -8,7 +8,7 @@ interface Props {
 
 export function WordDefinition({ word, onClose }: Props): JSX.Element {
     return (
-        <section className="mb-3 p-3 text-start border border-secondary rounded">
+        <section className="mb-3 p-2 text-start border border-secondary rounded">
             <div className="d-flex align-items-center">
                 <h2 className="h6 mb-0">{word.text.toUpperCase()}</h2>
 

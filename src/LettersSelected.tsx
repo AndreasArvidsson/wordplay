@@ -11,14 +11,14 @@ interface Props {
     onClick: (letter: Letter) => void;
 }
 
-export function SelectedLetters({
+export function LettersSelected({
     letters,
     disabled,
     flash,
     onClick,
 }: Props): JSX.Element {
     return (
-        <div className="letter-row">
+        <div className="d-flex justify-content-center">
             {letters.map((letter, index) => (
                 <span
                     key={index}
