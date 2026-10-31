@@ -1,24 +1,28 @@
 import type { JSX } from "preact";
 import type { GameWord } from "./types";
-import "./Clues.css";
 
 interface Props {
     words: GameWord[];
 }
 
-export function Clues({ words }: Props): JSX.Element {
+export function Clues({ words }: Props): JSX.Element | null {
+    const wordsWithClues = words.flatMap((word) => {
+        if (word.numCluesUsed === 0 || word.isSolved || word.isGivenUp) {
+            return [];
+        }
+        return {
+            word,
+            clues: word.clues.slice(0, word.numCluesUsed),
+        };
+    });
+
+    if (wordsWithClues.length === 0) {
+        return null;
+    }
+
     return (
-        <div className="game-clues mt-2">
-            {words.map((word) => {
-                const clues =
-                    word.numCluesUsed > 0 && !word.isSolved && !word.isGivenUp
-                        ? word.clues.slice(0, word.numCluesUsed)
-                        : undefined;
-
-                if (clues == null) {
-                    return null;
-                }
-
+        <section className="mb-3 p-3 text-start border border-secondary rounded">
+            {wordsWithClues.map(({ word, clues }) => {
                 return (
                     <div key={word.word.text}>
                         {word.word.text.length} letters:
@@ -30,6 +34,6 @@ export function Clues({ words }: Props): JSX.Element {
                     </div>
                 );
             })}
-        </div>
+        </section>
     );
 }

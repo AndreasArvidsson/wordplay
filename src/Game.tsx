@@ -133,7 +133,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
                     if (
                         event.target instanceof Element &&
                         event.target.closest(
-                            ".game-word-button, #game-definition button, a[href]",
+                            ".game-word-button, .btn-close, a[href]",
                         ) != null
                     ) {
                         return;
@@ -200,6 +200,8 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
                 />
             )}
 
+            <Clues words={gameWords} />
+
             <SelectedLetters
                 letters={selectedLetters}
                 disabled={disabledButtons}
@@ -225,8 +227,6 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
                 resetSelectedLetters={resetSelectedLetters}
                 submitSelectedLetters={submitSelectedLetters}
             />
-
-            <Clues words={gameWords} />
 
             <ButtonsRow2
                 isDone={isDone}
