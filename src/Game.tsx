@@ -195,7 +195,7 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
 
             <LettersAvailable
                 disabled={disableButtons}
-                letters={letters}
+                letters={shuffledLetters}
                 selectedLettersIds={
                     new Set(selectedLetters.map((l) => l?.id ?? ""))
                 }
