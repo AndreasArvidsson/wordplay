@@ -69,7 +69,17 @@ export function Game({ letters, words, exitGame }: Props): JSX.Element {
             .toLowerCase();
         const foundWord = gameWords.find((sw) => sw.word.text === word);
 
-        setSubmissionState(foundWord == null ? "fail" : "success");
+        const submissionOutcome = (() => {
+            if (foundWord == null) {
+                return "fail";
+            }
+            if (foundWord.isSolved) {
+                return "repeat";
+            }
+            return "success";
+        })();
+
+        setSubmissionState(submissionOutcome);
 
         setTimeout(() => {
             if (foundWord != null) {

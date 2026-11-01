@@ -18,4 +18,4 @@ export interface Letter {
     letter: string;
 }
 
-export type SubmissionState = "success" | "fail";
+export type SubmissionState = "success" | "repeat" | "fail";

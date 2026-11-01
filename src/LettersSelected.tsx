@@ -24,8 +24,7 @@ export function LettersSelected({
                     key={index}
                     className={classNames(
                         "letter-selected-wrapper",
-                        flash === "success" && "bg-success",
-                        flash === "fail" && "bg-danger",
+                        getFlashClass(flash),
                     )}
                 >
                     <Button
@@ -43,4 +42,22 @@ export function LettersSelected({
             ))}
         </div>
     );
+}
+
+function getFlashClass(flash: SubmissionState | undefined): string | undefined {
+    if (flash == null) {
+        return undefined;
+    }
+    switch (flash) {
+        case "success":
+            return "bg-success";
+        case "repeat":
+            return "bg-info";
+        case "fail":
+            return "bg-danger";
+        default: {
+            const _exhaustiveCheck: never = flash;
+            return undefined;
+        }
+    }
 }

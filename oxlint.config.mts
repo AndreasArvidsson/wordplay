@@ -20,6 +20,7 @@ const disabledRules = [
     "eslint/no-plusplus",
     "eslint/no-ternary",
     "eslint/no-undefined",
+    "eslint/no-underscore-dangle",
     "eslint/no-use-before-define",
     "eslint/no-void",
     "eslint/one-var",
